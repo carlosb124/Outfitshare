@@ -1,0 +1,87 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mb-4">
+                {{ form_row(form.titulo, {'attr': {'class': 'form-control-lg'}}) }}
+            </div>
+            
+            <div class="mb-4">
+                {{ form_label(form.prendas) }}
+                <div class="alert alert-info py-2 small">
+                    <i class="bi bi-info-circle me-1"></i> Selecciona al menos 2 prendas para crear tu outfit.
+                </div>
+                
+                {# Renderizado custom para los checkboxes #}
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" id="prendas-selector">
+                    {% for child in form.prendas %}
+                        <div class="col">
+                            <div class="form-check-card h-100">
+                                <input type="checkbox" 
+                                       id="{{ child.vars.id }}" 
+                                       name="{{ child.vars.full_name }}" 
+                                       value="{{ child.vars.value }}" 
+                                       class="btn-check" 
+                                       {% if child.vars.checked %}checked{% endif %}>
+                                
+                                <label class="btn btn-outline-light text-dark text-start w-100 h-100 p-0 position-relative border overflow-hidden" for="{{ child.vars.id }}">
+                                    {% set prenda = form.prendas.vars.choices[child.vars.value].data %}
+                                    
+                                    <div class="ratio ratio-1x1 bg-light">
+                                        {% if prenda.imagen %}
+                                            <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" class="object-fit-cover" alt="{{ prenda.nombre }}">
+                                        {% else %}
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-image text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="p-2 small bg-white border-top">
+                                        <div class="fw-bold text-truncate">{{ prenda.nombre }}</div>
+                                        <div class="text-muted text-xs">{{ prenda.categoria }}</div>
+                                    </div>
+                                    
+                                    {# Checkmark overlay #}
+                                    <div class="position-absolute top-0 end-0 m-1 check-indicator">
+                                        <i class="bi bi-check-circle-fill text-primary bg-white rounded-circle fs-5"></i>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ form_errors(form.prendas) }}
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="sticky-top" style="top: 2rem;">
+                <div class="card shadow-sm border-0 bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Detalles</h5>
+                        <div class="mb-3">
+                            {{ form_row(form.descripcion) }}
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button class="btn btn-primary btn-lg">
+                                <i class="bi bi-save me-2"></i> {{ button_label|default('Guardar Outfit') }}
+                            </button>
+                            <a href="{{ path('app_outfit_index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {# Custom CSS for the selector logic #}
+    <style>
+        .btn-check:checked + label {
+            border-color: var(--bs-primary) !important;
+            box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+        }
+        .btn-check:not(:checked) + label .check-indicator {
+            display: none;
+        }
+    </style>
+{{ form_end(form) }}

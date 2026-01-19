@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Outfit: {{ outfit.titulo }}{% endblock %}
+
+{% block body %}
+    <div class="mb-4">
+        <a href="{{ path('app_outfit_index') }}" class="text-decoration-none text-muted">
+            <i class="bi bi-arrow-left"></i> Volver a mis outfits
+        </a>
+    </div>
+
+    <div class="row">
+        {# Columna Principal (Info) #}
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 2rem;">
+                <div class="card-body">
+                    <h1 class="h2 fw-bold mb-3">{{ outfit.titulo }}</h1>
+                    
+                    <p class="text-muted mb-4">
+                        {{ outfit.descripcion|default('Sin descripción') }}
+                    </p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded">
+                        <div class="text-center">
+                            <h6 class="text-uppercase small text-muted mb-1">Fecha</h6>
+                            <span class="fw-bold">{{ outfit.fechaPublicacion|date('d M, Y') }}</span>
+                        </div>
+                        <div class="vr"></div>
+                        <div class="text-center">
+                            <h6 class="text-uppercase small text-muted mb-1">Prendas</h6>
+                            <span class="fw-bold">{{ outfit.prendas|length }}</span>
+                        </div>
+                        <div class="vr"></div>
+                        <div class="text-center">
+                            <h6 class="text-uppercase small text-muted mb-1">Likes</h6>
+                            {% include 'like/_button.html.twig' with {'outfit': outfit} %}
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_outfit_edit', {'id': outfit.id}) }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-pencil me-2"></i> Editar Outfit
+                        </a>
+                        <form method="post" action="{{ path('app_outfit_delete', {'id': outfit.id}) }}" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esto?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ outfit.id) }}">
+                            <button class="btn btn-outline-danger w-100">
+                                <i class="bi bi-trash me-2"></i> Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Columna de Prendas (Grid) #}
+        <div class="col-lg-8">
+            <h3 class="h5 mb-4 border-bottom pb-2">Prendas en este Look</h3>
+            <div class="row row-cols-2 row-cols-md-3 g-3">
+                {% for prenda in outfit.prendas %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="ratio ratio-1x1 position-relative">
+                                {% if prenda.imagen %}
+                                    <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" 
+                                         class="card-img-top object-fit-cover rounded-top" 
+                                         alt="{{ prenda.nombre }}">
+                                {% else %}
+                                    <div class="d-flex align-items-center justify-content-center bg-secondary text-white h-100">
+                                        <i class="bi bi-image fs-1 opacity-50"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 bg-dark bg-opacity-75 text-white">
+                                    <small class="d-block text-truncate fw-bold">{{ prenda.nombre }}</small>
+                                    <small class="d-block small opacity-75">{{ prenda.marca|default('Sin marca') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

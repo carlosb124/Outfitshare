@@ -1,0 +1,539 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demo Fetch API - OutfitShare{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .prenda-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    .prenda-item {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.4s ease forwards;
+    }
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 3rem;
+    }
+    .loading-spinner.active {
+        display: block;
+    }
+    .filter-btn.active {
+        background: var(--primary-gradient);
+        color: white;
+        border-color: transparent;
+    }
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+    .code-preview {
+        background: #1a1a2e;
+        color: #e0e0e0;
+        border-radius: 12px;
+        padding: 1rem;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.75rem;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .code-preview .keyword {
+        color: #c792ea;
+    }
+    .code-preview .function {
+        color: #82aaff;
+    }
+    .code-preview .string {
+        color: #c3e88d;
+    }
+    .code-preview .comment {
+        color: #697098;
+    }
+    .fetch-badge {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="hero-section">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">
+                <i class="bi bi-code-slash me-2"></i>Demo Fetch API
+            </h1>
+            <p class="text-muted mb-0">
+                JavaScript moderno con <span class="fetch-badge">async/await</span>
+            </p>
+        </div>
+        <div>
+            <a href="{{ path('app_prenda_ajax_demo') }}" class="btn btn-outline-primary me-2">
+                <i class="bi bi-lightning-charge me-1"></i>Ver con jQuery AJAX
+            </a>
+            <a href="{{ path('app_prenda_index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Volver
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Panel Principal -->
+        <div class="col-lg-8">
+            <!-- Filtros por categoría -->
+            <div class="card mb-4 p-3">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <span class="text-muted me-2"><i class="bi bi-funnel me-1"></i>Filtrar:</span>
+                    <button class="btn btn-outline-secondary filter-btn active" data-categoria="all">
+                        Todas
+                    </button>
+                    <div id="categoria-buttons" class="d-flex gap-2"></div>
+                </div>
+            </div>
+
+            <!-- Spinner de carga -->
+            <div class="loading-spinner" id="loading-spinner">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-3 text-muted">Cargando prendas con Fetch API...</p>
+            </div>
+
+            <!-- Grid de prendas -->
+            <div class="prenda-grid" id="prendas-container"></div>
+
+            <!-- Estado vacío -->
+            <div class="text-center py-5 d-none" id="empty-state">
+                <div class="card py-5 px-4">
+                    <i class="bi bi-inbox text-muted" style="font-size: 5rem;"></i>
+                    <h3 class="mt-4 fw-bold">No hay prendas</h3>
+                    <p class="text-muted mb-4">¡Añade tu primera prenda usando el formulario!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Lateral -->
+        <div class="col-lg-4">
+            <!-- Formulario Fetch -->
+            <div class="card p-4 mb-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-plus-circle me-2"></i>Añadir Prenda (Fetch)
+                </h5>
+                <form id="fetch-form">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Marca</label>
+                        <input type="text" class="form-control" id="marca" name="marca">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Categoría *</label>
+                        <select class="form-select" id="categoria" name="categoria" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="camisetas">Camisetas</option>
+                            <option value="pantalones">Pantalones</option>
+                            <option value="zapatos">Zapatos</option>
+                            <option value="accesorios">Accesorios</option>
+                            <option value="abrigos">Abrigos</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="submit-btn">
+                        <i class="bi bi-check-lg me-2"></i>Guardar Prenda
+                    </button>
+                </form>
+            </div>
+
+            <!-- Código de ejemplo -->
+            <div class="card p-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-braces me-2"></i>Código Fetch API
+                </h5>
+                <div class="code-preview">
+<span class="comment">// Ejemplo: Obtener prendas</span>
+<span class="keyword">const</span> <span class="function">getPrendas</span> = <span class="keyword">async</span> () => {
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/prendas'</span>);
+    <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+    <span class="keyword">return</span> data;
+  } <span class="keyword">catch</span> (error) {
+    console.<span class="function">error</span>(error);
+  }
+};
+
+<span class="comment">// Ejemplo: Crear prenda</span>
+<span class="keyword">const</span> <span class="function">createPrenda</span> = <span class="keyword">async</span> (prenda) => {
+  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/prendas'</span>, {
+    method: <span class="string">'POST'</span>,
+    headers: {
+      <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+    },
+    body: JSON.<span class="function">stringify</span>(prenda)
+  });
+  <span class="keyword">return</span> response.<span class="function">json</span>();
+};
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Confirmar eliminación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar <strong id="prenda-nombre"></strong>?</p>
+                <p class="text-muted mb-0">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// =====================
+// SERVICIO API CON FETCH
+// =====================
+const PrendaService = {
+    baseUrl: '/api/prendas',
+
+    async getPrendas() {
+        const response = await fetch(this.baseUrl);
+        if (!response.ok) throw new Error('Error al obtener prendas');
+        return response.json();
+    },
+
+    async getPrendasByCategoria(categoria) {
+        const response = await fetch(`${this.baseUrl}/categoria/${categoria}`);
+        if (!response.ok) throw new Error('Error al filtrar prendas');
+        return response.json();
+    },
+
+    async getCategorias() {
+        const response = await fetch(`${this.baseUrl}/categorias/list`);
+        if (!response.ok) throw new Error('Error al obtener categorías');
+        return response.json();
+    },
+
+    async createPrenda(data) {
+        const response = await fetch(this.baseUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Error al crear prenda');
+        }
+        return response.json();
+    },
+
+    async deletePrenda(id) {
+        const response = await fetch(`${this.baseUrl}/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Error al eliminar prenda');
+        return response.json();
+    }
+};
+
+// =====================
+// UI MANAGER
+// =====================
+const UIManager = {
+    elements: {
+        container: document.getElementById('prendas-container'),
+        spinner: document.getElementById('loading-spinner'),
+        emptyState: document.getElementById('empty-state'),
+        form: document.getElementById('fetch-form'),
+        submitBtn: document.getElementById('submit-btn'),
+        toastContainer: document.getElementById('toast-container'),
+        categoriaButtons: document.getElementById('categoria-buttons'),
+        deleteModal: null,
+        confirmDeleteBtn: document.getElementById('confirm-delete'),
+        prendaNombre: document.getElementById('prenda-nombre')
+    },
+    
+    prendaToDelete: null,
+
+    init() {
+        this.elements.deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        this.bindEvents();
+        this.loadInitialData();
+    },
+
+    bindEvents() {
+        // Formulario
+        this.elements.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        // Confirmar eliminación
+        this.elements.confirmDeleteBtn.addEventListener('click', () => this.handleConfirmDelete());
+        
+        // Filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleFilter(e));
+        });
+    },
+
+    async loadInitialData() {
+        await this.loadPrendas();
+        await this.loadCategorias();
+    },
+
+    async loadPrendas(categoria = 'all') {
+        this.showSpinner();
+        this.clearContainer();
+        this.hideEmptyState();
+
+        try {
+            const response = categoria === 'all' 
+                ? await PrendaService.getPrendas()
+                : await PrendaService.getPrendasByCategoria(categoria);
+
+            this.hideSpinner();
+
+            if (response.data.length === 0) {
+                this.showEmptyState();
+                return;
+            }
+
+            response.data.forEach((prenda, index) => {
+                const card = this.createPrendaCard(prenda);
+                card.style.animationDelay = `${index * 0.1}s`;
+                this.elements.container.appendChild(card);
+            });
+
+            // Bind delete buttons
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => this.handleDeleteClick(e));
+            });
+
+        } catch (error) {
+            this.hideSpinner();
+            this.showToast(error.message, 'error');
+        }
+    },
+
+    async loadCategorias() {
+        try {
+            const response = await PrendaService.getCategorias();
+            this.elements.categoriaButtons.innerHTML = '';
+            
+            response.data.forEach(categoria => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-outline-secondary filter-btn';
+                btn.dataset.categoria = categoria;
+                btn.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+                btn.addEventListener('click', (e) => this.handleFilter(e));
+                this.elements.categoriaButtons.appendChild(btn);
+            });
+        } catch (error) {
+            console.error('Error loading categorias:', error);
+        }
+    },
+
+    async handleSubmit(e) {
+        e.preventDefault();
+        
+        const formData = {
+            nombre: document.getElementById('nombre').value,
+            marca: document.getElementById('marca').value,
+            categoria: document.getElementById('categoria').value
+        };
+
+        this.setButtonLoading(true);
+
+        try {
+            const response = await PrendaService.createPrenda(formData);
+            this.showToast('¡Prenda creada correctamente!');
+            
+            // Añadir al grid
+            this.hideEmptyState();
+            const card = this.createPrendaCard(response.data);
+            this.elements.container.prepend(card);
+            
+            // Bind delete button
+            card.querySelector('.delete-btn').addEventListener('click', (e) => this.handleDeleteClick(e));
+            
+            // Reset form
+            this.elements.form.reset();
+            
+            // Reload categories
+            await this.loadCategorias();
+
+        } catch (error) {
+            this.showToast(error.message, 'error');
+        } finally {
+            this.setButtonLoading(false);
+        }
+    },
+
+    handleDeleteClick(e) {
+        const btn = e.currentTarget;
+        this.prendaToDelete = btn.dataset.id;
+        this.elements.prendaNombre.textContent = btn.dataset.nombre;
+        this.elements.deleteModal.show();
+    },
+
+    async handleConfirmDelete() {
+        if (!this.prendaToDelete) return;
+
+        const btn = this.elements.confirmDeleteBtn;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        btn.disabled = true;
+
+        try {
+            await PrendaService.deletePrenda(this.prendaToDelete);
+            this.showToast('Prenda eliminada correctamente');
+            
+            // Remove from DOM
+            const element = document.querySelector(`.prenda-item[data-id="${this.prendaToDelete}"]`);
+            element.style.opacity = '0';
+            element.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                element.remove();
+                if (this.elements.container.children.length === 0) {
+                    this.showEmptyState();
+                }
+            }, 300);
+            
+            this.elements.deleteModal.hide();
+
+        } catch (error) {
+            this.showToast(error.message, 'error');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            this.prendaToDelete = null;
+        }
+    },
+
+    handleFilter(e) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        this.loadPrendas(e.currentTarget.dataset.categoria);
+    },
+
+    createPrendaCard(prenda) {
+        const div = document.createElement('div');
+        div.className = 'prenda-item';
+        div.dataset.id = prenda.id;
+
+        const imageHtml = prenda.imagen
+            ? `<img src="${prenda.imagen}" class="prenda-card-img" alt="${prenda.nombre}">`
+            : `<div class="prenda-card-img d-flex align-items-center justify-content-center bg-light">
+                 <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
+               </div>`;
+
+        div.innerHTML = `
+            <div class="card h-100">
+                ${imageHtml}
+                <div class="card-body">
+                    <span class="badge badge-categoria mb-2">${prenda.categoria}</span>
+                    <h5 class="card-title fw-bold">${prenda.nombre}</h5>
+                    ${prenda.marca ? `<p class="card-text text-muted mb-2"><i class="bi bi-tag me-1"></i>${prenda.marca}</p>` : ''}
+                    <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${prenda.id}" data-nombre="${prenda.nombre}">
+                        <i class="bi bi-trash me-1"></i>Eliminar
+                    </button>
+                </div>
+            </div>
+        `;
+
+        return div;
+    },
+
+    showSpinner() {
+        this.elements.spinner.classList.add('active');
+    },
+
+    hideSpinner() {
+        this.elements.spinner.classList.remove('active');
+    },
+
+    showEmptyState() {
+        this.elements.emptyState.classList.remove('d-none');
+    },
+
+    hideEmptyState() {
+        this.elements.emptyState.classList.add('d-none');
+    },
+
+    clearContainer() {
+        this.elements.container.innerHTML = '';
+    },
+
+    setButtonLoading(loading) {
+        const btn = this.elements.submitBtn;
+        if (loading) {
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
+            btn.disabled = true;
+        } else {
+            btn.innerHTML = '<i class="bi bi-check-lg me-2"></i>Guardar Prenda';
+            btn.disabled = false;
+        }
+    },
+
+    showToast(message, type = 'success') {
+        const bgClass = type === 'success' ? 'bg-success' : 'bg-danger';
+        const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast show';
+        toast.innerHTML = `
+            <div class="toast-header ${bgClass} text-white">
+                <i class="bi bi-${icon}-fill me-2"></i>
+                <strong class="me-auto">${type === 'success' ? 'Éxito' : 'Error'}</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">${message}</div>
+        `;
+        
+        this.elements.toastContainer.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
+};
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    UIManager.init();
+});
+</script>
+{% endblock %}

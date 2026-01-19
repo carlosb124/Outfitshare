@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Estilista Virtual{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-gradient"><i class="bi bi-magic me-2"></i>Estilista Virtual</h1>
+        <p class="text-muted">¿No sabes qué ponerte? Deja que el azar decida por ti.</p>
+    </div>
+
+    {# Turbo Frame para recarga asíncrona #}
+    <turbo-frame id="randomizer_frame">
+        <div class="row justify-content-center align-items-center g-4 mb-5">
+            {% if hasEnough %}
+                <div class="col-md-3">
+                    {% if outfit.top %}
+                        <div class="card shadow-sm border-0 h-100">
+                             <div class="card-header bg-white border-0 text-center text-muted small">PARTE SUPERIOR</div>
+                             <img src="{{ asset('uploads/images/' ~ outfit.top.imagen) }}" class="card-img-top object-fit-cover" style="height: 300px;" alt="Top">
+                             <div class="card-footer bg-white border-0 text-center fw-bold">{{ outfit.top.nombre }}</div>
+                        </div>
+                    {% else %}
+                        <div class="card bg-light border-0 h-100 d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <span class="text-muted">Falta prenda superior</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-1 d-none d-md-flex justify-content-center text-muted">
+                    <i class="bi bi-plus-lg fs-2"></i>
+                </div>
+
+                <div class="col-md-3">
+                    {% if outfit.bottom %}
+                         <div class="card shadow-sm border-0 h-100">
+                             <div class="card-header bg-white border-0 text-center text-muted small">PARTE INFERIOR</div>
+                             <img src="{{ asset('uploads/images/' ~ outfit.bottom.imagen) }}" class="card-img-top object-fit-cover" style="height: 300px;" alt="Bottom">
+                             <div class="card-footer bg-white border-0 text-center fw-bold">{{ outfit.bottom.nombre }}</div>
+                        </div>
+                    {% else %}
+                        <div class="card bg-light border-0 h-100 d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <span class="text-muted">Falta prenda inferior</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if outfit.shoes %}
+                <div class="col-md-1 d-none d-md-flex justify-content-center text-muted">
+                    <i class="bi bi-plus-lg fs-2"></i>
+                </div>
+
+                <div class="col-md-3">
+                         <div class="card shadow-sm border-0 h-100">
+                             <div class="card-header bg-white border-0 text-center text-muted small">CALZADO</div>
+                             <img src="{{ asset('uploads/images/' ~ outfit.shoes.imagen) }}" class="card-img-top object-fit-cover" style="height: 300px;" alt="Shoes">
+                             <div class="card-footer bg-white border-0 text-center fw-bold">{{ outfit.shoes.nombre }}</div>
+                        </div>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="col-12 text-center py-5 bg-light rounded">
+                    <i class="bi bi-emoji-frown display-4 text-muted mb-3"></i>
+                    <h3>Ups, necesitamos más ropa</h3>
+                    <p class="text-muted">Sube al menos una parte superior y una inferior para jugar.</p>
+                    <a href="{{ path('app_prenda_new') }}" class="btn btn-primary" data-turbo="false">Subir Ropa</a>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if hasEnough %}
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ path('app_randomizer_index') }}" class="btn btn-outline-dark btn-lg px-4">
+                    <i class="bi bi-arrow-repeat me-2"></i> Probar otra combinación
+                </a>
+                
+                {# Botón simple de guardado sin lógica compleja de pre-selección por ahora, o redirect con IDs #}
+                {% set ids = [] %}
+                {% if outfit.top %} {% set ids = ids|merge([outfit.top.id]) %} {% endif %}
+                {% if outfit.bottom %} {% set ids = ids|merge([outfit.bottom.id]) %} {% endif %}
+                {% if outfit.shoes %} {% set ids = ids|merge([outfit.shoes.id]) %} {% endif %}
+                
+                <a href="{{ path('app_outfit_new', {'pre_selected': ids|join(',')}) }}" class="btn btn-primary btn-lg px-4" data-turbo="false">
+                    <i class="bi bi-heart-fill me-2"></i> Guardar como Outfit
+                </a>
+            </div>
+        {% endif %}
+    </turbo-frame>
+</div>
+{% endblock %}

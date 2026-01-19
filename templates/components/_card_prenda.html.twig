@@ -1,0 +1,73 @@
+{# ============================================
+   OutfitShare - Pin Card (Pinterest Style)
+   ============================================ #}
+
+{% if prenda is defined %}
+<div class="masonry-item">
+    <div class="card card-outfit">
+        {# Image Wrapper con Overlay #}
+        <div class="img-wrapper position-relative">
+            {# Imagen #}
+            {% if prenda.imagen is defined and prenda.imagen is not empty %}
+                <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" 
+                     alt="{{ prenda.nombre }}"
+                     loading="lazy">
+            {% else %}
+                <div class="bg-os-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                     <i class="bi bi-image text-os-secondary h1"></i>
+                </div>
+            {% endif %}
+            
+            {# Badge de Categoría (Flotante) #}
+            {% if prenda.categoria %}
+                <span class="badge-float">{{ prenda.categoria }}</span>
+            {% endif %}
+            
+            {# Overlay de Acciones (Solo visible en Hover) #}
+            <div class="action-overlay">
+                {# Editar (Primary Action) #}
+                <a href="{{ path('app_prenda_edit', {'id': prenda.id}) }}" 
+                   class="btn btn-primary rounded-pill btn-sm px-3 shadow-sm">
+                    Guardar
+                </a>
+                
+                {# Más opciones (Secondary) #}
+                <button class="btn-icon-float" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <div class="dropdown-menu">
+                     <a class="dropdown-item" href="{{ path('app_prenda_delete', {'id': prenda.id}) }}" 
+                        onclick="return confirm('¿Seguro que quieres borrarlo?')">Eliminar</a>
+                </div>
+            </div>
+        </div>
+        
+        {# Info Minimalista (Debajo de imagen) #}
+        <div class="card-meta mt-2">
+            <h6 class="card-title-sm text-truncate">{{ prenda.nombre }}</h6>
+            {% if prenda.user is defined and prenda.user %}
+                <div class="d-flex align-items-center mt-1">
+                    {# Avatar Placeholder con inicial #}
+                    <div class="rounded-circle bg-os-secondary d-flex align-items-center justify-content-center me-2" 
+                         style="width: 24px; height: 24px; font-size: 10px;">
+                        {{ prenda.user.name|first|upper }}
+                    </div>
+                    <span class="card-user-sm">{{ prenda.user.name }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{# ============================================
+   Ejemplo de uso en una página:
+   
+   <div class="row g-3 g-md-4">
+       {% for prenda in prendas %}
+           <div class="col-6 col-md-4 col-lg-3">
+               {% include 'components/_card_prenda.html.twig' with {'prenda': prenda} %}
+           </div>
+       {% endfor %}
+   </div>
+   ============================================ #}

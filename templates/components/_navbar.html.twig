@@ -1,0 +1,112 @@
+{# ============================================
+   OutfitShare - Navbar Responsive
+   Diseño: Minimalista, Blanco con sombra suave
+   ============================================ #}
+
+<nav class="navbar navbar-expand-lg navbar-outfitshare">
+    <div class="container-fluid px-4">
+        {# Logo / Brand #}
+        <a class="navbar-brand d-flex align-items-center me-3" href="{{ path('app_feed') }}">
+            <i class="bi bi-bag-heart-fill me-2 text-os-primary"></i>
+            <span>OutfitShare</span>
+        </a>
+        
+        {# Search Bar (Desktop) - Pinterest Style #}
+        <div class="d-none d-lg-block flex-grow-1 mx-3" style="max-width: 600px;">
+            <div class="search-bar-container">
+                <i class="bi bi-search text-os-secondary"></i>
+                <input type="text" class="search-input" placeholder="Buscar outfits, prendas...">
+            </div>
+        </div>
+        
+        {# Botón Hamburguesa #}
+        <button class="navbar-toggler" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarMain">
+            {# Enlaces #}
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_feed' ? 'active' : '' }}" 
+                           href="{{ path('app_feed') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_outfit_index' ? 'active' : '' }}" 
+                           href="{{ path('app_outfit_index') }}">Mis Outfits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_randomizer_index' ? 'active' : '' }}" 
+                           href="{{ path('app_randomizer_index') }}">
+                           <i class="bi bi-magic me-1"></i> Estilista
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_prenda_index' ? 'active' : '' }}" 
+                           href="{{ path('app_prenda_index') }}">Mis Prendas</a>
+                    </li>
+                {% endif %}
+                
+                {# Theme Toggle #}
+                <li class="nav-item">
+                    <button class="theme-switch" id="themeToggle" title="Cambiar tema">
+                        <i class="bi bi-moon-stars"></i>
+                    </button>
+                </li>
+                
+                {% if app.user %}
+                    {# User Profile #}
+                    <li class="nav-item dropdown ms-lg-2">
+                         <a class="nav-link p-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+                            <div class="rounded-circle bg-os-secondary d-flex align-items-center justify-content-center" 
+                                 style="width: 48px; height: 48px;">
+                                <span class="fw-bold">{{ app.user.name|first|upper }}</span>
+                            </div>
+                            <div class="d-none d-lg-block">
+                                <small class="d-block lh-1 text-dark">{{ app.user.name }}</small>
+                                <small class="text-xs text-muted">
+                                    {{ app.user.puntos }} pts 
+                                    {% if app.user.puntos >= 500 %}
+                                        <span class="badge bg-warning text-dark">Influencer</span>
+                                    {% elseif app.user.puntos >= 100 %}
+                                        <span class="badge bg-info text-dark">Trendy</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Novato</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-header">Hola, {{ app.user.name }}</span></li>
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Salir</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-primary rounded-pill px-4 ms-2" href="{{ path('app_login') }}">Entrar</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Theme Toggler Logic
+    document.getElementById('themeToggle').addEventListener('click', () => {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('os-theme', newTheme);
+        
+        // Update Icon (optional, could be done with CSS too)
+    });
+</script>

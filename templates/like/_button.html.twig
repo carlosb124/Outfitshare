@@ -1,0 +1,23 @@
+<div id="like_outfit_{{ outfit.id }}" class="d-inline-block">
+    {% if app.user %}
+        {% set isLiked = false %}
+        {% for like in outfit.likes %}
+            {% if like.user == app.user %}
+                {% set isLiked = true %}
+            {% endif %}
+        {% endfor %}
+
+        <form action="{{ path('app_like_toggle', {'id': outfit.id}) }}" method="post" data-turbo-frame="like_outfit_{{ outfit.id }}">
+            <button type="submit" class="btn btn-sm btn-light rounded-circle {{ isLiked ? 'text-danger' : 'text-muted' }}">
+                <i class="bi {{ isLiked ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                <small class="ms-1 text-dark">{{ outfit.likes|length }}</small>
+            </button>
+        </form>
+    {% else %}
+        {# Vista para usuarios no logueados #}
+        <a href="{{ path('app_login') }}" class="btn btn-sm btn-light rounded-circle text-muted">
+            <i class="bi bi-heart"></i>
+            <small class="ms-1 text-dark">{{ outfit.likes|length }}</small>
+        </a>
+    {% endif %}
+</div>

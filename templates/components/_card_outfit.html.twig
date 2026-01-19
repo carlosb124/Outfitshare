@@ -1,0 +1,63 @@
+<div class="card mb-3 shadow-sm hover-overlay transition-all">
+    <div class="card-body p-2">
+        {# Collage de imágenes (Top 3 + contador) #}
+        <div class="d-flex gap-1 mb-2" style="height: 200px; overflow: hidden; border-radius: 4px;">
+            {% set visiblePrendas = outfit.prendas|slice(0, 3) %}
+            {% set count = outfit.prendas|length %}
+            
+            {% if count == 1 %}
+                 {# Solo 1 imagen (no debería pasar por validación, pero por seguridad) #}
+                 <img src="{{ asset('uploads/images/' ~ visiblePrendas[0].imagen) }}" class="w-100 h-100 object-fit-cover" alt="Outfit">
+            {% elseif count == 2 %}
+                 {# 2 mitades #}
+                 {% for p in visiblePrendas %}
+                     <div class="w-50 h-100">
+                         <img src="{{ asset('uploads/images/' ~ p.imagen) }}" class="w-100 h-100 object-fit-cover" alt="Prenda">
+                     </div>
+                 {% endfor %}
+            {% else %}
+                 {# 1 Grande izquierda, 2 pequeñas derecha #}
+                 <div class="w-75 h-100">
+                     <img src="{{ asset('uploads/images/' ~ visiblePrendas[0].imagen) }}" class="w-100 h-100 object-fit-cover" alt="Main Item">
+                 </div>
+                 <div class="w-25 h-100 d-flex flex-column gap-1">
+                     <div class="h-50">
+                         <img src="{{ asset('uploads/images/' ~ visiblePrendas[1].imagen) }}" class="w-100 h-100 object-fit-cover" alt="Item 2">
+                     </div>
+                     <div class="h-50 position-relative">
+                         {% if count > 2 %}
+                             {% if count > 3 %}
+                                 <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 text-white d-flex align-items-center justify-content-center small fw-bold">
+                                     +{{ count - 2 }}
+                                 </div>
+                             {% endif %}
+                             <img src="{{ asset('uploads/images/' ~ visiblePrendas[2].imagen) }}" class="w-100 h-100 object-fit-cover" alt="Item 3">
+                         {% endif %}
+                     </div>
+                 </div>
+            {% endif %}
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center px-1">
+            <div>
+                <h6 class="card-title fw-bold text-dark mb-0 text-truncate" style="max-width: 150px;">
+                    {{ outfit.titulo }}
+                </h6>
+                <small class="text-muted" style="font-size: 0.75rem;">
+                    Por {{ outfit.user.name|default('Anónimo') }}
+                </small>
+            </div>
+            
+            {# Like Button #}
+            {% include 'like/_button.html.twig' with {'outfit': outfit} %}
+        </div>
+        
+        {% if outfit.descripcion %}
+            <p class="card-text text-muted smaller px-1 mt-2 text-truncate">
+                {{ outfit.descripcion }}
+            </p>
+        {% endif %}
+        
+        <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}" class="stretched-link"></a>
+    </div>
+</div>

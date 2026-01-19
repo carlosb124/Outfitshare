@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}OutfitShare - Descubre tu estilo{% endblock %}</title>
+        
+        {# Meta SEO #}
+        <meta name="description" content="OutfitShare - Organiza e inspírate.">
+        <meta name="theme-color" content="#FF9AA2">
+        
+        {# Google Fonts - Inter #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        {# Bootstrap 5 & Icons #}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+        
+        {# Custom Styles #}
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        
+        {# Theme Initializer (Avoid flash of wrong theme) #}
+        <script>
+            // Leer tema guardado o preferencia del sistema
+            (function() {
+                const savedTheme = localStorage.getItem('os-theme');
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            })();
+        </script>
+        
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {# Navbar Responsive #}
+        {% include 'components/_navbar.html.twig' %}
+
+        <main class="container py-4">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+            {% block body %}{% endblock %}
+        </main>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Token CSRF para peticiones AJAX
+            const CSRF_TOKEN = '{{ csrf_token("ajax") }}';
+            
+            // Configuración global de jQuery AJAX
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': CSRF_TOKEN
+                }
+            });
+        </script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
