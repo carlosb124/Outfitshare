@@ -23,6 +23,7 @@ security:
                 target: app_login
 
     access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/prenda, roles: ROLE_USER }
         - { path: ^/outfit, roles: ROLE_USER }
 
