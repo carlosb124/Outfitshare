@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings - OutfitShare{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto py-8">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 transition-colors">
+        <div class="flex items-center mb-8">
+            <a href="{{ path('app_profile_index') }}" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-dark-gray dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors mr-4">
+                <i class="bi bi-arrow-left text-lg"></i>
+            </a>
+            <h1 class="font-extrabold text-2xl text-dark-gray dark:text-white">Edit Profile</h1>
+        </div>
+        
+        {{ form_start(form, {'attr': {'class': 'space-y-5'}}) }}
+            
+            {# Photos Section #}
+            <div class="bg-gray-50 dark:bg-gray-900 p-6 rounded-3xl border border-gray-200 dark:border-gray-700">
+                <h3 class="font-extrabold text-dark-gray dark:text-white mb-6 flex items-center gap-2 text-lg">
+                    <i class="bi bi-images text-neon-lime"></i> Profile Images
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {# Profile Photo #}
+                    <div x-data="{ photoPreview: '{{ app.user.profilePhoto|default(null) }}' }">
+                        <label class="block text-sm font-bold text-dark-gray dark:text-gray-300 mb-2">Profile Photo</label>
+                        <div class="flex items-center gap-4">
+                            <div class="relative group cursor-pointer" @click="$refs.profileInput.click()">
+                                <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-white dark:border-gray-700 shadow-md bg-gray-200 dark:bg-gray-700">
+                                    <template x-if="photoPreview">
+                                        <img :src="photoPreview" class="w-full h-full object-cover">
+                                    </template>
+                                    <template x-if="!photoPreview">
+                                        <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                            <i class="bi bi-person-fill text-3xl"></i>
+                                        </div>
+                                    </template>
+                                    
+                                    {# Overlay #}
+                                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <i class="bi bi-camera-fill text-white"></i>
+                                    </div>
+                                </div>
+                                <div class="absolute -bottom-1 -right-1 w-7 h-7 bg-neon-lime text-dark-gray rounded-full flex items-center justify-center border-2 border-white dark:border-gray-700 shadow-sm">
+                                    <i class="bi bi-pencil-fill text-xs"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1">
+                                <button type="button" @click="$refs.profileInput.click()" class="text-xs font-bold bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:border-dark-gray dark:hover:border-gray-400 text-dark-gray dark:text-white px-4 py-2 rounded-xl transition-colors mb-1">
+                                    Change Photo
+                                </button>
+                                <p class="text-[10px] text-gray-400">JPG, PNG or WEBP. Max 5MB.</p>
+                            </div>
+                        </div>
+                        {# Hidden Input #}
+                        <div class="hidden">
+                            {{ form_widget(form.profilePhoto, {
+                                'attr': {
+                                    'x-ref': 'profileInput',
+                                    '@change': 'const file = $el.files[0]; if(file){ const reader = new FileReader(); reader.onload = (e) => { photoPreview = e.target.result; }; reader.readAsDataURL(file); }'
+                                }
+                            }) }}
+                        </div>
+                        {{ form_errors(form.profilePhoto) }}
+                    </div>
+
+                    {# Banner Photo #}
+                    <div x-data="{ bannerPreview: '{{ app.user.bannerPhoto|default(null) }}' }">
+                        <label class="block text-sm font-bold text-dark-gray dark:text-gray-300 mb-2">Banner Photo</label>
+                        <div class="relative group cursor-pointer w-full h-24 rounded-2xl overflow-hidden bg-gray-200 dark:bg-gray-700 border-2 border-white dark:border-gray-600 shadow-sm" @click="$refs.bannerInput.click()">
+                             <template x-if="bannerPreview">
+                                <img :src="bannerPreview" class="w-full h-full object-cover">
+                            </template>
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/20 transition-colors">
+                                <span class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-dark-gray dark:text-white shadow-sm group-hover:scale-105 transition-transform flex items-center gap-2">
+                                    <i class="bi bi-upload"></i> Upload Banner
+                                </span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-2 text-right">Recommended: 1200x400px</p>
+
+                         {# Hidden Input #}
+                        <div class="hidden">
+                             {{ form_widget(form.bannerPhoto, {
+                                'attr': {
+                                    'x-ref': 'bannerInput',
+                                    '@change': 'const file = $el.files[0]; if(file){ const reader = new FileReader(); reader.onload = (e) => { bannerPreview = e.target.result; }; reader.readAsDataURL(file); }'
+                                }
+                            }) }}
+                        </div>
+                        {{ form_errors(form.bannerPhoto) }}
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.name, null, {'label_attr': {'class': 'dark:text-gray-300'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white shadow-sm focus:border-neon-lime focus:ring-neon-lime dark:focus:bg-gray-800'}}) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div>
+                {{ form_label(form.nickname, null, {'label_attr': {'class': 'dark:text-gray-300'}}) }}
+                <div class="relative">
+                    <span class="absolute left-3 top-2.5 text-gray-400 font-bold">@</span>
+                    {{ form_widget(form.nickname, {'attr': {'class': 'block w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white shadow-sm focus:border-neon-lime focus:ring-neon-lime sm:text-sm pl-8 dark:focus:bg-gray-800'}}) }}
+                </div>
+                {{ form_errors(form.nickname) }}
+            </div>
+
+            <div>
+                {{ form_label(form.biography, null, {'label_attr': {'class': 'dark:text-gray-300'}}) }}
+                {{ form_widget(form.biography, {'attr': {'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white shadow-sm focus:border-neon-lime focus:ring-neon-lime dark:focus:bg-gray-800'}}) }}
+                <p class="text-xs text-gray-400 mt-1">Tell us a bit about your style journey.</p>
+                {{ form_errors(form.biography) }}
+            </div>
+
+            <div>
+                {{ form_label(form.stylePreference, null, {'label_attr': {'class': 'dark:text-gray-300'}}) }}
+                {{ form_widget(form.stylePreference, {'attr': {'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white shadow-sm focus:border-neon-lime focus:ring-neon-lime dark:focus:bg-gray-800'}}) }}
+                {{ form_errors(form.stylePreference) }}
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                {{ form_label(form.isPublic, null, {'label_attr': {'class': 'dark:text-white font-bold'}}) }}
+                <div class="mt-2 space-y-2">
+                    {% for child in form.isPublic %}
+                        <div class="flex items-center">
+                            {{ form_widget(child, {'attr': {'class': 'focus:ring-neon-lime h-4 w-4 text-neon-lime border-gray-300 dark:border-gray-600 dark:bg-gray-800'}}) }}
+                            {{ form_label(child, null, {'label_attr': {'class': 'ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+             <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-dark-gray dark:text-white mb-3 flex items-center gap-2">
+                    <i class="bi bi-shield-lock"></i> Privacy Zones
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        {{ form_widget(form.showLikesPublicly, {'attr': {'class': 'focus:ring-neon-lime h-5 w-5 text-neon-lime border-gray-300 dark:border-gray-600 dark:bg-gray-800 rounded'}}) }}
+                        {{ form_label(form.showLikesPublicly, null, {'label_attr': {'class': 'ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300'}}) }}
+                    </div>
+                    <div class="flex items-center">
+                         {{ form_widget(form.showSavedPublicly, {'attr': {'class': 'focus:ring-neon-lime h-5 w-5 text-neon-lime border-gray-300 dark:border-gray-600 dark:bg-gray-800 rounded'}}) }}
+                         {{ form_label(form.showSavedPublicly, null, {'label_attr': {'class': 'ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-dark-gray dark:bg-white text-white dark:text-dark-gray font-extrabold py-3.5 rounded-xl shadow-md hover:bg-black dark:hover:bg-gray-200 transition-all transform hover:-translate-y-0.5">
+                    Save Changes
+                </button>
+            </div>
+            
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

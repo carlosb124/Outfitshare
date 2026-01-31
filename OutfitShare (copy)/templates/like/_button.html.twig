@@ -1,0 +1,69 @@
+{% set isLiked = false %}
+{% if app.user %}
+    {% for like in outfit.likes %}
+        {% if like.user == app.user %}
+            {% set isLiked = true %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="inline-block"
+     x-data="{ 
+         liked: {{ isLiked ? 'true' : 'false' }},
+         count: {{ outfit.likes|length }},
+         isLoading: false,
+         
+         async toggle() {
+             if (this.isLoading) return;
+             this.isLoading = true;
+             
+             // Optimistic UI update
+             const previousState = this.liked;
+             const previousCount = this.count;
+             
+             this.liked = !this.liked;
+             this.count = this.liked ? this.count + 1 : this.count - 1;
+             
+             try {
+                 const response = await fetch('{{ path('app_like_toggle', {'id': outfit.id}) }}', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' }
+                 });
+                 
+                 if (!response.ok) {
+                     if (response.status === 401) window.location.href = '{{ path('app_login') }}';
+                     throw new Error('Failed');
+                 }
+                 
+                 const data = await response.json();
+                 // Sync with server truth
+                 this.liked = data.isActive;
+                 this.count = data.count;
+                 
+             } catch (e) {
+                 // Revert on error
+                 this.liked = previousState;
+                 this.count = previousCount;
+                 console.error(e);
+             } finally {
+                 this.isLoading = false;
+             }
+         }
+     }">
+    
+    {% if app.user %}
+        <button type="button" 
+                @click="toggle()"
+                :class="liked ? 'bg-red-50 text-red-500' : 'bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500'"
+                class="group flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-200">
+            <i class="bi text-lg transition-transform group-active:scale-125"
+               :class="liked ? 'bi-heart-fill' : 'bi-heart'"></i>
+            <span class="font-bold text-sm" x-text="count"></span>
+        </button>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all">
+            <i class="bi bi-heart text-lg"></i>
+            <span class="font-bold text-sm">{{ outfit.likes|length }}</span>
+        </a>
+    {% endif %}
+</div>

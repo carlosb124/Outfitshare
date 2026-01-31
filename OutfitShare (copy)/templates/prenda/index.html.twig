@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Wardrobe - OutfitShare{% endblock %}
+
+{% block body %}
+{# Header Section #}
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+    <div>
+        <h1 class="font-extrabold text-4xl md:text-5xl tracking-tight text-dark-gray dark:text-gray-300 mb-2">
+            Mi Armario
+        </h1>
+        <p class="text-gray-500 dark:text-gray-500 font-medium">
+            <span class="text-neon-lime font-bold">{{ prendas|length }}</span> prendas en tu colección
+        </p>
+    </div>
+    
+    <a href="{{ path('app_prenda_new') }}" 
+       class="bg-dark-gray dark:bg-white text-white dark:text-dark-gray hover:bg-neon-lime dark:hover:bg-neon-lime hover:text-dark-gray transition-colors px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 group">
+        <i class="bi bi-plus-lg group-hover:rotate-90 transition-transform"></i>
+        <span>Añadir Prenda</span>
+    </a>
+</div>
+
+{# Filter Tabs (Mockup for now) #}
+<div class="flex overflow-x-auto pb-4 gap-2 mb-8 no-scrollbar">
+    {% for filter in ['Todo', 'Arriba', 'Abajo', 'Vestidos', 'Zapatos', 'Accesorios'] %}
+        <button class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-colors
+            {{ loop.first ? 'bg-neon-lime text-black shadow-lg shadow-neon-lime/20' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700' }}">
+            {{ filter }}
+        </button>
+    {% endfor %}
+</div>
+
+{# Content Grid #}
+{% if prendas|length > 0 %}
+    {# Masonry Layout attempt using CSS Columns #}
+    <div class="columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
+        {% for prenda in prendas %}
+            {% include 'components/_card_prenda.html.twig' with {'prenda': prenda} %}
+        {% endfor %}
+    </div>
+{% else %}
+    {# Empty State #}
+    <div class="flex flex-col items-center justify-center py-20 text-center">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-full shadow-sm mb-6 border border-gray-100 dark:border-gray-700">
+            <i class="bi bi-handbag text-6xl text-gray-200 dark:text-gray-600"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-dark-gray dark:text-white mb-2">Tu armario está vacío</h3>
+        <p class="text-gray-400 mb-8 max-w-md">Empieza a construir tu armario digital añadiendo tu primera prenda. ¡Es el primer paso para mejorar tu estilo!</p>
+        <a href="{{ path('app_prenda_new') }}" class="bg-neon-lime text-dark-gray px-8 py-3 rounded-full font-bold shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+            Añadir Primera Prenda
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

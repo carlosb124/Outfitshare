@@ -1,0 +1,24 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Dashboard{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users me-2"></i>Usuarios Registrados</h5>
+                <p class="display-4 fw-bold text-primary">{{ count_users }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-tshirt me-2"></i>Outfits Publicados</h5>
+                <p class="display-4 fw-bold text-success">{{ count_outfits }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

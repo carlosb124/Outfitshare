@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Outfit - OutfitShare{% endblock %}
+
+{% block body %}
+{# Outfit Editor Container - Now wrapped in form to include sidebar inputs #}
+{{ form_start(form, {'attr': {'class': 'h-[calc(100vh-140px)] flex flex-col md:flex-row gap-6', 'data-controller': 'outfit-editor'}}) }}
+    
+    {# Sidebar: Wardrobe Picker #}
+    <div class="w-full md:w-1/3 lg:w-1/4 flex flex-col bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        <div class="p-4 border-b border-gray-100 bg-gray-50">
+            {{ form_errors(form) }}
+            <h2 class="font-extrabold text-lg text-dark-gray flex items-center">
+                <i class="bi bi-grid-fill mr-2 text-neon-lime"></i> Armario
+            </h2>
+            <p class="text-xs text-gray-400">Toca para añadir</p>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+            <div class="mb-4 text-red-500 font-bold text-sm">
+                {{ form_errors(form.prendas) }}
+            </div>
+            {# Iterate over checkbox choices provided by Symfony Form #}
+            <div class="grid grid-cols-2 gap-3">
+                {% for choice in form.prendas %}
+                    {# Access the underlying entity from the choices array using the choice value (ID) as key #}
+                    {% set prenda = form.prendas.vars.choices[choice.vars.value].data %}
+                    <div class="cursor-pointer group relative aspect-[3/4] rounded-xl overflow-hidden border-2 border-transparent hover:border-neon-lime transition-all"
+                         data-outfit-editor-target="sidebarItem"
+                         data-action="click->outfit-editor#toggleItem"
+                         data-id="{{ choice.vars.value }}"
+                         data-image="{{ asset(prenda.imagen ? 'uploads/images/' ~ prenda.imagen : 'images/placeholder.png') }}"
+                         data-name="{{ prenda.nombre|default('Item') }}">
+                        
+                        {# Hidden Checkbox from Symfony #}
+                        <div class="hidden">
+                            {{ form_widget(choice, {'attr': {'data-outfit-editor-target': 'checkbox'}}) }}
+                        </div>
+
+                        {% if prenda.imagen is defined and prenda.imagen %}
+                            <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" 
+                                 class="w-full h-full object-cover" 
+                                 alt="{{ prenda.nombre|default('Item') }}">
+                        {% else %}
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                                <i class="bi bi-image text-gray-300"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="absolute bottom-0 inset-x-0 bg-black/60 p-1">
+                            <p class="text-white text-[10px] truncate text-center">{{ prenda.nombre }}</p>
+                        </div>
+                        
+                        {# Selected Indicator #}
+                        <div class="absolute top-2 right-2 w-5 h-5 bg-neon-lime rounded-full items-center justify-center hidden group-[.ring-4]:flex shadow-sm">
+                            <i class="bi bi-check text-black text-xs font-bold"></i>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            {% if form.prendas|length == 0 %}
+                <div class="text-center py-10 text-gray-400">
+                    <p>No hay ropa disponible.</p>
+                    <a href="{{ path('app_prenda_new') }}" class="text-neon-lime underline text-sm">Añadir una nueva</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Main Area: Canvas + details #}
+    <div class="flex-1 flex flex-col gap-6">
+        
+            {# Canvas Area #}
+            <div class="flex-1 bg-white rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden flex flex-col mb-6">
+                <div class="absolute top-0 right-0 p-4 z-10">
+                    <span class="bg-white/80 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-gray-500 shadow-sm border border-gray-100">
+                        Editor de Lienzo
+                    </span>
+                </div>
+                
+                {# Drop Zone / Canvas #}
+                <div class="flex-1 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] flex items-center justify-center p-8 overflow-hidden relative" 
+                     data-outfit-editor-target="canvas">
+                    {# JS will render items here #}
+                    <div class="text-center text-gray-300">
+                        <i class="bi bi-stars text-5xl mb-3 block"></i>
+                        <span class="font-medium">Selecciona prendas de tu armario</span>
+                    </div>
+                </div>
+            </div>
+
+            {# Bottom Bar: Info & Save #}
+            <div class="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 flex flex-col md:flex-row gap-6 items-start">
+                <div class="flex-1 space-y-4 w-full">
+                    <div>
+                        {{ form_label(form.titulo, null, {'label_attr': {'class': 'block text-sm font-bold text-dark-gray mb-1'}}) }}
+                        {{ form_widget(form.titulo, {'attr': {'class': 'w-full rounded-xl border-gray-300 shadow-sm focus:border-neon-lime focus:ring-neon-lime'}}) }}
+                        {{ form_errors(form.titulo) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.descripcion, null, {'label_attr': {'class': 'block text-sm font-bold text-dark-gray mb-1'}}) }}
+                        {{ form_widget(form.descripcion, {'attr': {'class': 'w-full rounded-xl border-gray-300 shadow-sm focus:border-neon-lime focus:ring-neon-lime', 'rows': 2}}) }}
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-auto flex flex-col justify-end">
+                     <button type="submit" class="bg-neon-lime text-dark-gray font-extrabold px-8 py-4 rounded-xl shadow-lg hover:brightness-105 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <i class="bi bi-magic"></i>
+                        <span>Guardar Outfit</span>
+                    </button>
+                    <!-- {{ form_rest(form) }} --> {# Render hidden fields/tokens but avoid rendering hidden 'prendas' field again #}
+                </div>
+            </div>
+            
+            {# Render CSRF token explicitly since we skipped rest or manual rendering might miss it if we are tricky #}
+            {# Actually form_end renders the rest, so we need to be careful not to render 'prendas' visualization twice #}
+            <div class="hidden">
+                 {# We already rendered prendas manually above via loop. Symfony form_end might try to render it again if we don't render widget.
+                    But wait, we iterated form.prendas, but we didn't call form_widget(form.prendas).
+                    We called form_widget(choice) for each choice. 
+                    So form_end might think 'prendas' row is not rendered. 
+                    Let's just output the rest in a hidden div to catch tokens and suppress visible output. #}
+                 {{ form_end(form) }}
+            </div>
+
+        <!-- </form> --> {# closed by form_end #}
+    </div>
+</div>
+{% endblock %}

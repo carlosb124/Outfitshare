@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications - OutfitShare{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-2xl font-extrabold text-dark-gray">Notifications</h1>
+        {% if notifications|length > 0 %}
+            <span class="text-sm text-gray-400 font-bold">All caught up!</span>
+        {% endif %}
+    </div>
+
+    <div class="space-y-4">
+        {% for notification in notifications %}
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex gap-4 transition-all hover:shadow-md {{ not notification.isRead ? 'border-l-4 border-l-neon-lime' : '' }}">
+                {# Icon Type #}
+                <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center 
+                    {{ notification.type == 'like' ? 'bg-red-50 text-red-500' : 
+                       notification.type == 'save' ? 'bg-neon-lime text-dark-gray' : 
+                       notification.type == 'comment' ? 'bg-blue-50 text-blue-500' : 
+                       notification.type == 'follow' ? 'bg-purple-50 text-purple-500' : 'bg-gray-100 text-gray-500' }}">
+                    <i class="bi {{ notification.type == 'like' ? 'bi-heart-fill' : 
+                                  notification.type == 'save' ? 'bi-bookmark-fill' : 
+                                  notification.type == 'comment' ? 'bi-chat-fill' : 
+                                  notification.type == 'follow' ? 'bi-person-plus-fill' : 'bi-bell-fill' }}"></i>
+                </div>
+
+                <div class="flex-1">
+                    <p class="text-dark-gray text-sm leading-relaxed">
+                        {% if notification.sender %}
+                            <a href="{{ path('app_profile_show', {'id': notification.sender.id}) }}" class="font-bold hover:underline">
+                                {{ notification.sender.name }}
+                            </a>
+                        {% else %}
+                            <span class="font-bold">System</span>
+                        {% endif %}
+                        {% if notification.type == 'like' %}
+                            liked your outfit
+                        {% elseif notification.type == 'save' %}
+                            saved your outfit
+                        {% elseif notification.type == 'comment' %}
+                            commented on your outfit
+                        {% elseif notification.type == 'follow' %}
+                            started following you
+                        {% else %}
+                            {{ notification.message }}
+                        {% endif %}
+                        {% if notification.relatedOutfit %}
+                            <a href="{{ path('app_outfit_show', {'id': notification.relatedOutfit.id}) }}" class="font-bold underline decoration-neon-lime decoration-2 hover:text-black">
+                                {{ notification.relatedOutfit.titulo }}
+                            </a>
+                        {% endif %}
+                    </p>
+                    <span class="text-xs text-gray-400 font-bold mt-1 block">
+                        {{ notification.createdAt|date('H:i · d M') }}
+                    </span>
+                </div>
+
+                {% if notification.relatedOutfit and notification.relatedOutfit.prendas|first %}
+                     <div class="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
+                        <img src="{{ asset('uploads/images/' ~ notification.relatedOutfit.prendas|first.imagen) }}" class="w-full h-full object-cover">
+                     </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
+                    <i class="bi bi-bell-slash text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-gray-500">No notifications yet</h3>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

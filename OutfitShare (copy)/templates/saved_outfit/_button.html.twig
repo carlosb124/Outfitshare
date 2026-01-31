@@ -1,0 +1,59 @@
+{% set isSaved = false %}
+{% if app.user %}
+    {% for saved in app.user.savedOutfits %}
+        {% if saved.outfit.id == outfit.id %}
+            {% set isSaved = true %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="inline-block"
+     x-data="{ 
+         saved: {{ isSaved ? 'true' : 'false' }},
+         isLoading: false,
+         
+         async toggle() {
+             if (this.isLoading) return;
+             this.isLoading = true;
+             
+             // Optimistic UI update
+             const previousState = this.saved;
+             this.saved = !this.saved;
+             
+             try {
+                 const response = await fetch('{{ path('app_save_toggle', {'id': outfit.id}) }}', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' }
+                 });
+                 
+                 if (!response.ok) {
+                    if (response.status === 401) window.location.href = '{{ path('app_login') }}';
+                    throw new Error('Failed');
+                 }
+                 
+                 const data = await response.json();
+                 this.saved = data.isActive;
+                 
+             } catch (e) {
+                 this.saved = previousState;
+                 console.error(e);
+             } finally {
+                 this.isLoading = false;
+             }
+         }
+     }">
+     
+    {% if app.user %}
+        <button type="button" 
+                @click="toggle()"
+                :class="saved ? 'bg-neon-lime text-dark-gray' : 'bg-gray-100 text-gray-500 hover:bg-neon-lime/20 hover:text-dark-gray'"
+                class="group flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-200">
+            <i class="bi text-lg transition-transform group-active:scale-125"
+               :class="saved ? 'bi-bookmark-fill' : 'bi-bookmark'"></i>
+        </button>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all">
+            <i class="bi bi-bookmark text-lg"></i>
+        </a>
+    {% endif %}
+</div>

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}OutfitShare - Discover Style{% endblock %}
+
+{% block body %}
+{# Pills Nav / Categories #}
+<div class="flex overflow-x-auto pb-6 gap-3 mb-8 no-scrollbar scroll-smooth">
+    <a href="#" class="px-6 py-2.5 rounded-full font-extrabold bg-neon-lime text-black whitespace-nowrap shadow-lg shadow-neon-lime/20 transform hover:-translate-y-0.5 transition-all">For You</a>
+    <a href="#" class="px-6 py-2.5 rounded-full font-bold bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">Trending</a>
+    <a href="#" class="px-6 py-2.5 rounded-full font-bold bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">Streetwear</a>
+    <a href="#" class="px-6 py-2.5 rounded-full font-bold bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">Vintage</a>
+    <a href="#" class="px-6 py-2.5 rounded-full font-bold bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">Formal</a>
+    <a href="#" class="px-6 py-2.5 rounded-full font-bold bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">Accessories</a>
+    <a href="#" class="px-6 py-2.5 rounded-full font-bold bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">Summer 2026</a>
+</div>
+
+{# Masonry Feed #}
+<div class="px-0 md:px-0">
+    {% if outfits|length > 0 %}
+        <div class="mb-4 text-center">
+             <span class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Fresh Drops</span>
+        </div>
+        
+        <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6 space-y-6">
+            {% for outfit in outfits %}
+                {% include 'components/_card_outfit.html.twig' with {'outfit': outfit} %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="flex flex-col items-center justify-center py-20">
+            <div class="w-24 h-24 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg mb-6 border border-gray-100 dark:border-gray-700">
+                <i class="bi bi-stars text-4xl text-neon-lime"></i>
+            </div>
+            <h3 class="text-3xl font-extrabold text-dark-gray dark:text-white mb-2">Be the first to inspire!</h3>
+            <p class="text-gray-400 mb-8">No outfits yet. Share your unique style with the world.</p>
+            <a href="{{ path('app_outfit_new') }}" class="bg-neon-lime text-dark-gray px-8 py-3.5 rounded-full font-bold shadow-lg hover:shadow-neon-lime/50 transition-all transform hover:-translate-y-1">
+                Create First Outfit
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,355 @@
+/* ============================================
+   OutfitShare - Pinterest Style & Dark Mode
+   Fuente: 'Inter' (Nativa/Moderna)
+   Diseño: Masonry-feel, Bordes redondeados, Dark Mode
+   ============================================ */
+
+/* ============================================
+   1. IMPORTAR FUENTES (INTER)
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   2. VARIABLES CSS (SYSTEMA DE TEMAS)
+   ============================================ */
+:root {
+    /* --- Paleta Base (Modo Claro) --- */
+    --os-primary: #E60023;
+    /* Rojo Pinterest-like pero mantenemos Salmón si prefieres, usaremos un match */
+    --os-primary-share: #FF9AA2;
+    /* Tu color Salmón original */
+    --os-primary-share-hover: #ff7a85;
+
+    --os-bg-body: #FFFFFF;
+    --os-bg-surface: #FFFFFF;
+    --os-bg-secondary: #E9E9E9;
+    /* Gris claro botones Pinterest */
+    --os-bg-hover: #F0F0F0;
+
+    --os-text-primary: #111111;
+    --os-text-secondary: #5F5F5F;
+    --os-border: #EFEFEF;
+
+    --os-overlay: rgba(0, 0, 0, 0.4);
+    --os-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+    /* Bordes Pinterest Style */
+    --os-radius-sm: 8px;
+    --os-radius-md: 16px;
+    --os-radius-lg: 24px;
+    --os-radius-pill: 999px;
+
+    /* Transiciones */
+    --os-anim: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* --- MODO OSCURO (Overrides) --- */
+[data-theme="dark"] {
+    --os-bg-body: #121212;
+    /* Negro suave */
+    --os-bg-surface: #1E1E1E;
+    /* Gris oscuro cards ni tan negro */
+    --os-bg-secondary: #2C2C2C;
+    /* Botones secundarios dark */
+    --os-bg-hover: #383838;
+
+    --os-text-primary: #EAEAEA;
+    --os-text-secondary: #A0A0A0;
+    --os-border: #333333;
+
+    --os-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   3. ESTILOS GLOBALES
+   ============================================ */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--os-bg-body);
+    color: var(--os-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ============================================
+   4. COMPONENTES PINTEREST STYLE
+   ============================================ */
+
+/* --- Cards (Visual Style) --- */
+.card-outfit {
+    background-color: transparent;
+    /* Pinterest no suele tener fondo en la card contenedora */
+    border: none;
+    border-radius: var(--os-radius-md);
+    overflow: hidden;
+    position: relative;
+    cursor: zoom-in;
+    transition: transform var(--os-anim);
+}
+
+.card-outfit .img-wrapper {
+    background-color: var(--os-bg-secondary);
+    border-radius: var(--os-radius-md);
+    overflow: hidden;
+    position: relative;
+}
+
+.card-outfit img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: filter var(--os-anim);
+}
+
+/* Overlay oscurecido al hover como Pinterest */
+.card-outfit:hover .img-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* --- Botones --- */
+.btn {
+    font-weight: 600;
+    border-radius: var(--os-radius-pill);
+    padding: 10px 20px;
+    border: none;
+    transition: filter 0.2s ease;
+}
+
+/* Primary: Salmón */
+.btn-primary {
+    background-color: var(--os-primary-share) !important;
+    color: #111 !important;
+    /* Texto oscuro para contraste en salmón */
+}
+
+.btn-primary:hover {
+    filter: brightness(0.9);
+    transform: none;
+}
+
+/* Secondary: Gris (Pinterest Style) */
+.btn-secondary,
+.btn-light {
+    background-color: var(--os-bg-secondary) !important;
+    color: var(--os-text-primary) !important;
+}
+
+.btn-secondary:hover,
+.btn-light:hover {
+    background-color: var(--os-bg-hover) !important;
+}
+
+/* --- Navbar Flotante --- */
+.navbar-outfitshare {
+    background-color: var(--os-bg-surface);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    /* Sutil */
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: var(--os-text-secondary) !important;
+    padding: 8px 16px !important;
+    border-radius: var(--os-radius-pill);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: var(--os-text-primary);
+    color: var(--os-bg-body) !important;
+    /* Invertir colores al activo como Pinterest */
+}
+
+/* Logo */
+.navbar-brand {
+    color: var(--os-primary-share) !important;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+}
+
+/* ============================================
+   5. MASONRY GRID (CSS COLUMNS)
+   ============================================ */
+/* Simula el layout de Pinterest fácilmente */
+.masonry-grid {
+    column-count: 2;
+    column-gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .masonry-grid {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1200px) {
+    .masonry-grid {
+        column-count: 4;
+        /* O 5 para pantallas muy grandes */
+    }
+}
+
+.masonry-item {
+    break-inside: avoid;
+    margin-bottom: 16px;
+}
+
+/* ============================================
+   6. UI ELEMENTS
+   ============================================ */
+.badge-float {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: var(--os-radius-pill);
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+}
+
+.action-overlay {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.card-outfit:hover .action-overlay {
+    opacity: 1;
+}
+
+.btn-icon-float {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--os-bg-surface);
+    color: var(--os-text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.btn-icon-float:hover {
+    background-color: var(--os-bg-hover);
+}
+
+.card-meta {
+    padding: 8px 4px;
+}
+
+.card-title-sm {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: var(--os-text-primary);
+}
+
+.card-user-sm {
+    font-size: 0.8rem;
+    color: var(--os-text-secondary);
+}
+
+/* --- Theme Toggle Switch --- */
+.theme-switch {
+    background: transparent;
+    border: none;
+    color: var(--os-text-secondary);
+    font-size: 1.2rem;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-switch:hover {
+    background-color: var(--os-bg-secondary);
+    color: var(--os-text-primary);
+}
+
+/* Formularios Dark Mode Friendly */
+.form-control {
+    background-color: var(--os-bg-secondary);
+    border: 2px solid transparent;
+    color: var(--os-text-primary);
+    border-radius: var(--os-radius-md);
+    padding: 12px 16px;
+}
+
+.form-control:focus {
+    background-color: var(--os-bg-surface);
+    border-color: var(--os-primary-share);
+    color: var(--os-text-primary);
+    box-shadow: 0 0 0 4px rgba(255, 154, 162, 0.2);
+}
+
+/* Dropdowns Dark Mode */
+.dropdown-menu {
+    background-color: var(--os-bg-surface);
+    border: 1px solid var(--os-border);
+    box-shadow: var(--os-shadow);
+    border-radius: var(--os-radius-md);
+}
+
+.dropdown-item {
+    color: var(--os-text-primary);
+    font-weight: 500;
+}
+
+.dropdown-item:hover {
+    background-color: var(--os-bg-secondary);
+    color: var(--os-text-primary);
+}
+
+/* Search Bar (Pinterest Style) */
+.search-bar-container {
+    background-color: var(--os-bg-secondary);
+    border-radius: var(--os-radius-pill);
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    width: 100%;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    color: var(--os-text-primary);
+    width: 100%;
+    padding: 0 8px;
+    font-weight: 500;
+}
+
+.search-input:focus {
+    outline: none;
+}
