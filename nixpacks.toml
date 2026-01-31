@@ -1,0 +1,14 @@
+[variables]
+    # Aquí le decimos qué herramientas de PHP instalar
+    PHP_EXTENSIONS = "pdo, pdo_mysql, iconv, mbstring"
+    # Forzamos modo producción para que Symfony sea rápido
+    APP_ENV = "prod"
+
+[phases.build]
+    # Estos comandos se ejecutan DESPUÉS de instalar las librerías
+    dependsOn = ['install']
+    cmds = [
+        'php bin/console tailwind:build --minify',
+        'php bin/console asset-map:compile',
+        'php bin/console doctrine:migrations:migrate --no-interaction'
+    ]
