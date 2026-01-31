@@ -3,44 +3,62 @@
 {% block title %}Registro - OutfitShare{% endblock %}
 
 {% block body %}
-<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
-    <div class="col-md-5">
-        <div class="card p-4">
-            <div class="card-body">
-                <div class="text-center mb-4">
-                    <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
-                    <h2 class="mt-3 fw-bold">Crear cuenta</h2>
-                    <p class="text-muted">Únete a OutfitShare</p>
+<div class="flex flex-col justify-center items-center min-h-[70vh] bg-off-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="w-full max-w-md">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neon-lime/20 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-black dark:text-neon-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Crear cuenta</h2>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Únete a la comunidad de OutfitShare</p>
+            </div>
+
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm border border-red-100 dark:border-red-800" role="alert">{{ flash_error }}</div>
+            {% endfor %}
+
+            {{ form_start(registrationForm, {'attr': {'class': 'space-y-6'}}) }}
+                <div>
+                    {{ form_label(registrationForm.name, 'Nombre', {'label_attr': {'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1'}}) }}
+                    <div class="relative">
+                        {{ form_widget(registrationForm.name, {'attr': {'class': 'block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:border-neon-lime focus:ring-neon-lime sm:text-sm py-3 px-4 transition-colors'}}) }}
+                    </div>
+                    {{ form_errors(registrationForm.name, {'attr': {'class': 'mt-1 text-sm text-red-500'}}) }}
                 </div>
 
-                {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
-                    <div class="mb-3">
-                        {{ form_label(registrationForm.name) }}
-                        {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control form-control-lg'}}) }}
-                        {{ form_errors(registrationForm.name) }}
+                <div>
+                    {{ form_label(registrationForm.email, 'Correo electrónico', {'label_attr': {'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1'}}) }}
+                    <div class="relative">
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:border-neon-lime focus:ring-neon-lime sm:text-sm py-3 px-4 transition-colors'}}) }}
                     </div>
+                    {{ form_errors(registrationForm.email, {'attr': {'class': 'mt-1 text-sm text-red-500'}}) }}
+                </div>
 
-                    <div class="mb-3">
-                        {{ form_label(registrationForm.email) }}
-                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control form-control-lg'}}) }}
-                        {{ form_errors(registrationForm.email) }}
+                <div>
+                    {{ form_label(registrationForm.plainPassword, 'Contraseña', {'label_attr': {'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1'}}) }}
+                    <div class="relative">
+                        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:border-neon-lime focus:ring-neon-lime sm:text-sm py-3 px-4 transition-colors'}}) }}
                     </div>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Mínimo 6 caracteres</p>
+                    {{ form_errors(registrationForm.plainPassword, {'attr': {'class': 'mt-1 text-sm text-red-500'}}) }}
+                </div>
 
-                    <div class="mb-3">
-                        {{ form_label(registrationForm.plainPassword) }}
-                        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control form-control-lg'}}) }}
-                        {{ form_errors(registrationForm.plainPassword) }}
-                    </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-black bg-neon-lime hover:bg-[#b0d902] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neon-lime transition-all duration-200 transform hover:scale-[1.02]">
+                        Registrarse
+                    </button>
+                </div>
+            {{ form_end(registrationForm) }}
 
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-person-check me-2"></i>Registrarse
-                        </button>
-                    </div>
-                {{ form_end(registrationForm) }}
-
-                <p class="text-center mt-4 mb-0">
-                    ¿Ya tienes cuenta? <a href="{{ path('app_login') }}" class="text-decoration-none fw-bold">Inicia sesión</a>
+            <div class="mt-8 text-center bg-gray-50 dark:bg-gray-700/30 rounded-lg py-4">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    ¿Ya tienes una cuenta? 
+                    <a href="{{ path('app_login') }}" class="font-bold text-black dark:text-white hover:text-neon-lime hover:underline transition-colors">
+                        Inicia sesión
+                    </a>
                 </p>
             </div>
         </div>

@@ -3,41 +3,73 @@
 {% block title %}Iniciar Sesión - OutfitShare{% endblock %}
 
 {% block body %}
-<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
-    <div class="col-md-5">
-        <div class="card p-4">
-            <div class="card-body">
-                <div class="text-center mb-4">
-                    <i class="bi bi-bag-heart-fill text-primary" style="font-size: 3rem;"></i>
-                    <h2 class="mt-3 fw-bold">Bienvenido</h2>
-                    <p class="text-muted">Inicia sesión en tu cuenta</p>
+<div class="flex flex-col justify-center items-center min-h-[70vh] bg-off-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="w-full max-w-md">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neon-lime/20 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-black dark:text-neon-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Bienvenido</h2>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Inicia sesión para continuar</p>
+            </div>
+
+            {% if error %}
+                <div class="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm border border-red-100 dark:border-red-800 flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-6">
+                <div>
+                    <label for="inputEmail" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <div class="relative">
+                        <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:border-neon-lime focus:ring-neon-lime sm:text-sm py-3 px-4 transition-colors" placeholder="email@ejemplo.com" autocomplete="email" required autofocus>
+                    </div>
                 </div>
 
-                {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
-
-                <form method="post">
-                    <div class="mb-3">
-                        <label for="inputEmail" class="form-label">Email</label>
-                        <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control form-control-lg" placeholder="email@ejemplo.com" required autofocus>
+                <div>
+                    <label for="inputPassword" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <input type="password" name="_password" id="inputPassword" class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:border-neon-lime focus:ring-neon-lime sm:text-sm py-3 px-4 transition-colors" placeholder="••••••••" autocomplete="current-password" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="inputPassword" class="form-label">Contraseña</label>
-                        <input type="password" name="_password" id="inputPassword" class="form-control form-control-lg" placeholder="••••••••" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                {#
+                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                    See https://symfony.com/doc/current/security/remember_me.html
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember_me" name="_remember_me" type="checkbox" class="h-4 w-4 text-neon-lime focus:ring-neon-lime border-gray-300 rounded">
+                            <label for="remember_me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Recuérdame</label>
+                        </div>
+                        <div class="text-sm">
+                            <a href="#" class="font-medium text-black dark:text-white hover:text-neon-lime hover:underline">¿Olvidaste tu contraseña?</a>
+                        </div>
                     </div>
+                #}
 
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="pt-2">
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-black bg-neon-lime hover:bg-[#b0d902] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neon-lime transition-all duration-200 transform hover:scale-[1.02]">
+                        Iniciar sesión
+                    </button>
+                </div>
+            </form>
 
-                    <div class="d-grid gap-2 mt-4">
-                        <button class="btn btn-primary btn-lg" type="submit">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
-                        </button>
-                    </div>
-                </form>
-
-                <p class="text-center mt-4 mb-0">
-                    ¿No tienes cuenta? <a href="{{ path('app_register') }}" class="text-decoration-none fw-bold">Regístrate aquí</a>
+            <div class="mt-8 text-center bg-gray-50 dark:bg-gray-700/30 rounded-lg py-4">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    ¿No tienes una cuenta? 
+                    <a href="{{ path('app_register') }}" class="font-bold text-black dark:text-white hover:text-neon-lime hover:underline transition-colors">
+                        Regístrate aquí
+                    </a>
                 </p>
             </div>
         </div>

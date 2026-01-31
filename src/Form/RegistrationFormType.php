@@ -19,16 +19,16 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nombre',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Tu nombre'],
+                'attr' => ['placeholder' => 'Tu nombre'],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'email@ejemplo.com'],
+                'attr' => ['placeholder' => 'email@ejemplo.com'],
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'label' => 'Contraseña',
-                'attr' => ['class' => 'form-control', 'autocomplete' => 'new-password', 'placeholder' => '••••••••'],
+                'attr' => ['autocomplete' => 'new-password', 'placeholder' => '••••••••'],
                 'constraints' => [
                     new NotBlank(['message' => 'Por favor, introduce una contraseña']),
                     new Length([
