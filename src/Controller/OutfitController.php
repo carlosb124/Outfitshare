@@ -80,7 +80,7 @@ class OutfitController extends AbstractController
     #[Route('/{id}/edit', name: 'app_outfit_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Outfit $outfit, EntityManagerInterface $entityManager): Response
     {
-        if ($outfit->getUser() !== $this->getUser()) {
+        if ($outfit->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('No eres el dueño de este outfit');
         }
 
@@ -104,7 +104,7 @@ class OutfitController extends AbstractController
     #[Route('/{id}', name: 'app_outfit_delete', methods: ['POST'])]
     public function delete(Request $request, Outfit $outfit, EntityManagerInterface $entityManager): Response
     {
-        if ($outfit->getUser() !== $this->getUser()) {
+        if ($outfit->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
 

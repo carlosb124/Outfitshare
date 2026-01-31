@@ -81,6 +81,10 @@ class PrendaController extends AbstractController
     #[Route('/{id}/edit', name: 'app_prenda_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Prenda $prenda, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
+        if ($prenda->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('No puedes editar esta prenda.');
+        }
+
         $form = $this->createForm(PrendaType::class, $prenda);
         $form->handleRequest($request);
 
@@ -118,6 +122,10 @@ class PrendaController extends AbstractController
     #[Route('/{id}/delete', name: 'app_prenda_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, Prenda $prenda, EntityManagerInterface $entityManager): Response
     {
+        if ($prenda->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('No puedes eliminar esta prenda.');
+        }
+
         // En una app real, verificaríamos el token CSRF aquí.
         // if ($this->isCsrfTokenValid('delete'.$prenda->getId(), $request->request->get('_token'))) { ... }
 
