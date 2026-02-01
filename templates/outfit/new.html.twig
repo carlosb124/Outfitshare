@@ -109,7 +109,7 @@
                         <i class="bi bi-magic"></i>
                         <span>Guardar Outfit</span>
                     </button>
-                    <!-- {{ form_rest(form) }} --> {# Render hidden fields/tokens but avoid rendering hidden 'prendas' field again #}
+
                 </div>
             </div>
             
@@ -121,6 +121,7 @@
                     We called form_widget(choice) for each choice. 
                     So form_end might think 'prendas' row is not rendered. 
                     Let's just output the rest in a hidden div to catch tokens and suppress visible output. #}
+                 {{ form_widget(form._token) }}
                  {{ form_end(form) }}
             </div>
 
