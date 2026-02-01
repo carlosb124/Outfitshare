@@ -28,6 +28,7 @@ class Notification
     private ?string $message = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Outfit $relatedOutfit = null;
 
     #[ORM\Column]
