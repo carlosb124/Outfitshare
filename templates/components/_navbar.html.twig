@@ -96,8 +96,11 @@
                          },
                          async updateCount() {
                             try {
-                                const res = await fetch('{{ path('app_notification_unread_count') }}');
-                                if (res.ok) {
+                                const res = await fetch('{{ path('app_notification_unread_count') }}', {
+                                    headers: { 'Accept': 'application/json' }
+                                });
+                                
+                                if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
                                     const data = await res.json();
                                     this.unreadCount = data.count;
                                     localStorage.setItem('os_unread_count', this.unreadCount);

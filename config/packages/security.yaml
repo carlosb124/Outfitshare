@@ -19,11 +19,13 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                default_target_path: app_prenda_index
+                default_target_path: app_feed
                 enable_csrf: true
+            entry_point: form_login
+            custom_authenticator: App\Security\GoogleAuthenticator
             logout:
                 path: app_logout
-                target: app_login
+                target: app_landing
 
     access_control:
         - { path: ^/prenda, roles: ROLE_USER }

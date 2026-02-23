@@ -16,7 +16,7 @@ class NotificationService
 
     public function create(User $recipient, string $type, string $message, ?User $sender = null, ?Outfit $relatedOutfit = null): void
     {
-        // Don't notify if user is notifying themselves (e.g. liking their own post)
+        // no notificar a los usuarios a si mismos
         if ($sender === $recipient) {
             return;
         }

@@ -24,13 +24,13 @@ class NotificationController extends AbstractController
     #[Route('/test', name: 'app_notification_test')]
     public function test(\App\Service\NotificationService $notificationService, \Doctrine\ORM\EntityManagerInterface $em): Response
     {
-        // Force create a notification for myself
+        //Alerta autogenerada para hacer tests
         $user = $this->getUser();
 
         $n = new \App\Entity\Notification();
         $n->setRecipient($user);
         $n->setType('system');
-        $n->setMessage("This is a test notification to check the red dot 🔴");
+        $n->setMessage("Esto es para generar el punto rojo 🔴");
         $n->setIsRead(false);
         $n->setCreatedAt(new \DateTimeImmutable());
 
@@ -46,10 +46,8 @@ class NotificationController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        // Mark all as read when visiting the page (optional, or can be done via button)
         $notificationService->markAllAsRead($user);
 
-        // Fetch explicitly sorted from DB to guarantee order
         $notifications = $notificationRepository->findBy(
             ['recipient' => $user],
             ['createdAt' => 'DESC']

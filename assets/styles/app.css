@@ -9,6 +9,7 @@
     /* Custom colors from legacy tailwind.config.js */
     --color-brand-accent: #C6F402;
     --color-neon-lime: #C6F402;
+    --color-lavender: #E6E6FA;
     --color-dark-gray: #121212;
     --color-off-white: #F8F9FA;
 }

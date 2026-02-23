@@ -6,11 +6,12 @@ use App\Repository\OutfitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class FeedController extends AbstractController
 {
-    #[Route('/', name: 'app_feed')]
-    #[Route('/', name: 'app_feed')]
+    #[Route('/feed', name: 'app_feed')]
+    #[IsGranted('ROLE_USER')]
     public function index(OutfitRepository $outfitRepository, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $search = $request->query->get('q');

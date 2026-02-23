@@ -32,7 +32,7 @@ class Prenda
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $size = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $price = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
