@@ -22,19 +22,9 @@
                         <div class="profile-avatar-placeholder">{{ user.name|first|upper }}</div>
                     {% endif %}
                 </div>
-                <div class="profile-follow-stats">
-                    <a href="#" class="profile-follow-stat">
-                        <span class="os-mono" style="font-size:18px;color:var(--os-text-primary);">{{ user.followers|length }}</span>
-                        <span class="os-label">Seguidores</span>
-                    </a>
-                    <a href="#" class="profile-follow-stat">
-                        <span class="os-mono" style="font-size:18px;color:var(--os-text-primary);">{{ user.following|length }}</span>
-                        <span class="os-label">Siguiendo</span>
-                    </a>
-                </div>
             </div>
             
-            <div style="display:flex;gap:10px;margin-bottom:8px;">
+            <div style="display:flex;gap:10px;">
                 {% if app.user == user %}
                     <a href="{{ path('app_profile_settings') }}" class="os-btn os-btn--outline os-btn--sm">Editar perfil</a>
                     <button class="os-btn os-btn--accent os-btn--sm">Compartir</button>

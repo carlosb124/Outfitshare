@@ -69,13 +69,20 @@
 
         {# ========== RIGHT: Sidebar ========== #}
         <div>
-            <div class="os-card" style="padding:28px;position:sticky;top:100px;">
+            <div class="os-card os-card--flat" style="padding:28px;position:sticky;top:100px;">
 
                 {# Title + Meta #}
                 <h1 class="os-title os-title--md" style="margin-bottom:8px;">{{ outfit.titulo }}</h1>
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-                    <a href="{{ path('app_profile_show', {'id': outfit.user.id}) }}" class="os-mono" style="font-size:13px;color:var(--os-accent);text-decoration:none;font-weight:700;">
-                        @{{ outfit.user.nickname|default(outfit.user.name) }}
+                    <a href="{{ path('app_profile_show', {'id': outfit.user.id}) }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+                        <div class="outfit-author-avatar">
+                            {% if outfit.user.profilePhoto %}
+                                <img src="{{ outfit.user.profilePhoto }}" alt="{{ outfit.user.name }}">
+                            {% else %}
+                                {{ outfit.user.name|first|upper }}
+                            {% endif %}
+                        </div>
+                        <span class="os-mono" style="font-size:13px;color:var(--os-accent);font-weight:700;">@{{ outfit.user.nickname|default(outfit.user.name) }}</span>
                     </a>
                     <span style="color:var(--os-text-tertiary);">·</span>
                     <span style="font-size:13px;color:var(--os-text-tertiary);">{{ outfit.fechaPublicacion|date('d M Y') }}</span>
@@ -145,10 +152,18 @@
                 <div style="max-height:240px;overflow-y:auto;padding-right:4px;">
                     {% for comment in outfit.comments %}
                         <div class="outfit-comment">
-                            <div class="outfit-comment-avatar">{{ comment.author.name|first|upper }}</div>
+                            <div class="outfit-comment-avatar">
+                                {% if comment.author.profilePhoto %}
+                                    <img src="{{ comment.author.profilePhoto }}" alt="{{ comment.author.name }}">
+                                {% else %}
+                                    {{ comment.author.name|first|upper }}
+                                {% endif %}
+                            </div>
                             <div>
                                 <div class="outfit-comment-bubble">
-                                    <p style="font-weight:700;font-size:13px;color:var(--os-text-primary);margin:0 0 2px;">{{ comment.author.name }}</p>
+                                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                                        <a href="{{ path('app_profile_show', {'id': comment.author.id}) }}" style="font-weight:700;font-size:13px;color:var(--os-text-primary);text-decoration:none;">{{ comment.author.name }}</a>
+                                    </div>
                                     <p style="font-size:14px;color:var(--os-text-secondary);margin:0;line-height:1.5;">{{ comment.content }}</p>
                                 </div>
                                 <span class="os-hint">{{ comment.createdAt|date('H:i') }}</span>
