@@ -2,6 +2,8 @@
     PHP_EXTENSIONS = "pdo, pdo_mysql, iconv, mbstring, intl, gd"
     APP_ENV = "prod"
     APP_DEBUG = "0"
+    COMPOSER_ALLOW_SUPERUSER = "1"
+    NIXPACKS_PHP_ROOT_DIR = "/app/public"
 
 [phases.setup]
     nixPkgs = ["...", "php83Extensions.gd"]
@@ -11,8 +13,9 @@
     cmds = [
         'php bin/console tailwind:build --minify',
         'php bin/console asset-map:compile',
-        'mkdir -p public/uploads/images'
+        'mkdir -p public/uploads/images',
+        'chmod +x run-app.sh'
     ]
 
 [start]
-    cmd = 'php bin/console doctrine:migrations:migrate --no-interaction && php bin/console cache:clear --env=prod && php -S 0.0.0.0:${PORT:-8080} -t public'
+    cmd = 'sh run-app.sh'
