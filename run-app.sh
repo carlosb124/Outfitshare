@@ -1,4 +1,7 @@
 #!/bin/bash
+# Install JS vendor assets (gitignored)
+php bin/console importmap:install
+
 # Build assets
 php bin/console tailwind:build --minify
 php bin/console asset-map:compile
