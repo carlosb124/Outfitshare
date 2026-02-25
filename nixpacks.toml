@@ -1,18 +1,18 @@
 [variables]
-    # Añadimos 'intl' que te la pedía el log
-    PHP_EXTENSIONS = "pdo, pdo_mysql, iconv, mbstring, intl"
+    PHP_EXTENSIONS = "pdo, pdo_mysql, iconv, mbstring, intl, gd"
     APP_ENV = "prod"
+    APP_DEBUG = "0"
+
+[phases.setup]
+    nixPkgs = ["...", "php83Extensions.gd"]
 
 [phases.build]
     dependsOn = ['install']
     cmds = [
         'php bin/console tailwind:build --minify',
-        'php bin/console asset-map:compile'
+        'php bin/console asset-map:compile',
+        'mkdir -p public/uploads/images'
     ]
 
-[phases.setup]
-    cmds = [
-        # Esto ya sabemos que funciona por tus logs
-        'php bin/console doctrine:migrations:migrate --no-interaction',
-        'php bin/console cache:clear'
-    ]
+[start]
+    cmd = 'php bin/console doctrine:migrations:migrate --no-interaction && php bin/console cache:clear --env=prod && php -S 0.0.0.0:${PORT:-8080} -t public'
