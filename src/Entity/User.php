@@ -74,8 +74,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bannerPhoto = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private bool $isPublic = false;
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $isPublic = true;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $showLikesPublicly = false;
@@ -91,6 +91,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followers')]
     private Collection $following;
+
+    #[ORM\OneToMany(mappedBy: 'target', targetEntity: FollowRequest::class, orphanRemoval: true)]
+    private Collection $followRequests;
 
     /**
      * @var Collection<int, Notification>
@@ -108,8 +111,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->savedOutfits = new ArrayCollection();
         $this->followers = new ArrayCollection();
         $this->following = new ArrayCollection();
-        $this->following = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->followRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -509,5 +512,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, FollowRequest>
+     */
+    public function getFollowRequests(): Collection
+    {
+        return $this->followRequests;
     }
 }

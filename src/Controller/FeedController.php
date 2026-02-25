@@ -22,7 +22,7 @@ class FeedController extends AbstractController
             $category = 'Para Ti';
         }
 
-        $outfits = $outfitRepository->findBySearchAndCategory($search, $category);
+        $outfits = $outfitRepository->findBySearchAndCategory($search, $category, $this->getUser());
 
         return $this->render('feed/index.html.twig', [
             'outfits' => $outfits,

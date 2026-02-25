@@ -13,17 +13,18 @@
 
     <div class="space-y-4">
         {% for notification in notifications %}
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex gap-4 transition-all hover:shadow-md {{ not notification.isRead ? 'border-l-4 border-l-neon-lime' : '' }}">
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex gap-4 transition-all hover:shadow-md {{ not notification.isRead ? 'border-l-4 border-l-neon-lime' : '' }}"
+                 {% if notification.type == 'follow_request' %}x-data="{ handled: false, action: '' }"{% endif %}>
                 {# Icon Type #}
                 <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center 
                     {{ notification.type == 'like' ? 'bg-red-50 text-red-500' : 
                        notification.type == 'save' ? 'bg-neon-lime text-dark-gray' : 
                        notification.type == 'comment' ? 'bg-blue-50 text-blue-500' : 
-                       notification.type == 'follow' ? 'bg-purple-50 text-purple-500' : 'bg-gray-100 text-gray-500' }}">
+                       (notification.type == 'follow' or notification.type == 'follow_request' or notification.type == 'follow_accepted') ? 'bg-purple-50 text-purple-500' : 'bg-gray-100 text-gray-500' }}">
                     <i class="bi {{ notification.type == 'like' ? 'bi-heart-fill' : 
                                   notification.type == 'save' ? 'bi-bookmark-fill' : 
                                   notification.type == 'comment' ? 'bi-chat-fill' : 
-                                  notification.type == 'follow' ? 'bi-person-plus-fill' : 'bi-bell-fill' }}"></i>
+                                  (notification.type == 'follow' or notification.type == 'follow_request' or notification.type == 'follow_accepted') ? 'bi-person-plus-fill' : 'bi-bell-fill' }}"></i>
                 </div>
 
                 <div class="flex-1">
@@ -33,16 +34,20 @@
                                 {{ notification.sender.name }}
                             </a>
                         {% else %}
-                            <span class="font-bold">System</span>
+                            <span class="font-bold">Sistema</span>
                         {% endif %}
                         {% if notification.type == 'like' %}
-                            liked your outfit
+                            le dio me gusta a tu outfit
                         {% elseif notification.type == 'save' %}
-                            saved your outfit
+                            guardó tu outfit
                         {% elseif notification.type == 'comment' %}
-                            commented on your outfit
+                            comentó en tu outfit
                         {% elseif notification.type == 'follow' %}
-                            started following you
+                            ha empezado a seguirte
+                        {% elseif notification.type == 'follow_request' %}
+                            quiere seguirte
+                        {% elseif notification.type == 'follow_accepted' %}
+                            aceptó tu solicitud de seguimiento
                         {% else %}
                             {{ notification.message }}
                         {% endif %}
@@ -52,6 +57,35 @@
                             </a>
                         {% endif %}
                     </p>
+
+                    {# Follow Request Actions #}
+                    {% if notification.type == 'follow_request' and notification.sender %}
+                        {% set followReq = null %}
+                        {% for req in pendingRequests|default([]) %}
+                            {% if req.requester.id == notification.sender.id %}
+                                {% set followReq = req %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if followReq %}
+                            <div x-show="!handled" class="flex gap-2 mt-2">
+                                <button @click="
+                                    fetch('{{ path('app_follow_request_accept', {'id': followReq.id}) }}', { method: 'POST' })
+                                        .then(r => r.json())
+                                        .then(d => { handled = true; action = 'accepted'; });
+                                " class="os-btn os-btn--accent os-btn--sm" style="font-size:12px;padding:4px 14px;">Aceptar</button>
+                                <button @click="
+                                    fetch('{{ path('app_follow_request_reject', {'id': followReq.id}) }}', { method: 'POST' })
+                                        .then(r => r.json())
+                                        .then(d => { handled = true; action = 'rejected'; });
+                                " class="os-btn os-btn--outline os-btn--sm" style="font-size:12px;padding:4px 14px;">Rechazar</button>
+                            </div>
+                            <p x-show="handled" class="text-xs text-gray-400 mt-2">
+                                <span x-show="action === 'accepted'" style="color:var(--os-accent);font-weight:700;">Solicitud aceptada ✓</span>
+                                <span x-show="action === 'rejected'">Solicitud rechazada</span>
+                            </p>
+                        {% endif %}
+                    {% endif %}
+
                     <span class="text-xs text-gray-400 font-bold mt-1 block">
                         {{ notification.createdAt|date('H:i · d M') }}
                     </span>
@@ -68,7 +102,7 @@
                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
                     <i class="bi bi-bell-slash text-2xl"></i>
                 </div>
-                <h3 class="font-bold text-gray-500">No notifications yet</h3>
+                <h3 class="font-bold text-gray-500">Sin notificaciones</h3>
             </div>
         {% endfor %}
     </div>

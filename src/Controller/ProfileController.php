@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserProfileType;
+use App\Repository\FollowRequestRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +17,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ProfileController extends AbstractController
 {
     #[Route('/', name: 'app_profile_index')]
-    public function index(): Response
+    public function index(FollowRequestRepository $followRequestRepository): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         return $this->render('profile/index.html.twig', [
-            'user' => $this->getUser(),
+            'user' => $user,
+            'pendingRequests' => $followRequestRepository->findPendingForUser($user),
         ]);
     }
 
@@ -44,10 +49,6 @@ class ProfileController extends AbstractController
                         $this->getParameter('kernel.project_dir') . '/public/uploads/images',
                         $newFilename
                     );
-                    // Store relative path or full URL depending on how it's used. 
-                    // Based on outfit usage, seems to simply store filename?
-                    // But User entity has full URL placeholders in Twig...
-                    // Let's store '/uploads/images/' . $newFilename so it works as a src directly.
                     $user->setProfilePhoto('/uploads/images/' . $newFilename);
                 } catch (\Exception $e) {
                     // ... handle exception if something happens during file upload
@@ -83,20 +84,24 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/user/{id}', name: 'app_profile_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user, FollowRequestRepository $followRequestRepository): Response
     {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+
         // If viewing own profile via this route, redirect to main profile route (canonical)
-        if ($this->getUser() === $user) {
+        if ($currentUser === $user) {
             return $this->redirectToRoute('app_profile_index');
         }
 
-        // Privacy Check: if profile is private, user must be valid?
-        // For now, let's assume all profiles are public-ish or we check $user->isPublic()
-        // If private and not following, maybe show limited view?
-        // Implementation Plan says: "Privacy settings apply".
+        // Check if there's a pending follow request from current user to this user
+        $followRequest = $followRequestRepository->findBetweenUsers($currentUser, $user);
+        $isPending = $followRequest && $followRequest->isPending();
 
         return $this->render('profile/index.html.twig', [
             'user' => $user,
+            'isPending' => $isPending,
+            'pendingRequests' => [],
         ]);
     }
 }

@@ -41,7 +41,7 @@ class NotificationController extends AbstractController
     }
 
     #[Route('/', name: 'app_notification_index')]
-    public function index(NotificationService $notificationService, \App\Repository\NotificationRepository $notificationRepository): Response
+    public function index(NotificationService $notificationService, \App\Repository\NotificationRepository $notificationRepository, \App\Repository\FollowRequestRepository $followRequestRepository): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -55,6 +55,7 @@ class NotificationController extends AbstractController
 
         return $this->render('notification/index.html.twig', [
             'notifications' => $notifications,
+            'pendingRequests' => $followRequestRepository->findPendingForUser($user),
         ]);
     }
 }

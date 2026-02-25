@@ -78,32 +78,10 @@ class OutfitController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_outfit_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Outfit $outfit, EntityManagerInterface $entityManager): Response
+    public function edit(Outfit $outfit): Response
     {
-        $user = $this->getUser();
-        if ($outfit->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
-            if ($user instanceof \App\Entity\User && $outfit->getUser()->getId() === $user->getId()) {
-                // Es el dueño (comparación por ID para evitar problemas de Proxy)
-            } else {
-                throw $this->createAccessDeniedException('No eres el dueño de este outfit');
-            }
-        }
-
-        $form = $this->createForm(OutfitType::class, $outfit);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Outfit actualizado correctamente.');
-
-            return $this->redirectToRoute('app_outfit_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('outfit/edit.html.twig', [
-            'outfit' => $outfit,
-            'form' => $form,
-        ]);
+        // Legacy edit template was removed — redirect to outfit view
+        return $this->redirectToRoute('app_outfit_show', ['id' => $outfit->getId()]);
     }
 
     #[Route('/{id}', name: 'app_outfit_delete', methods: ['POST'])]

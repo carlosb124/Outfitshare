@@ -75,8 +75,28 @@ class NotificationService
         $this->create(
             recipient: $followed,
             type: 'follow',
-            message: "{$follower->getName()} started following you",
+            message: "{$follower->getName()} ha empezado a seguirte",
             sender: $follower
+        );
+    }
+
+    public function notifyFollowRequest(User $requester, User $target): void
+    {
+        $this->create(
+            recipient: $target,
+            type: 'follow_request',
+            message: "{$requester->getName()} quiere seguirte",
+            sender: $requester
+        );
+    }
+
+    public function notifyFollowAccepted(User $accepter, User $requester): void
+    {
+        $this->create(
+            recipient: $requester,
+            type: 'follow_accepted',
+            message: "{$accepter->getName()} ha aceptado tu solicitud de seguimiento",
+            sender: $accepter
         );
     }
 

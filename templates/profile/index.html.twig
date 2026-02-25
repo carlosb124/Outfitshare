@@ -31,6 +31,7 @@
                 {% else %}
                     <div x-data="{ 
                         isFollowing: {{ app.user.following.contains(user) ? 'true' : 'false' }},
+                        isPending: {{ isPending|default(false) ? 'true' : 'false' }},
                         isLoading: false,
                         async toggle() {
                             if (this.isLoading) return;
@@ -38,17 +39,30 @@
                             try {
                                 const res = await fetch('{{ path('app_follow_toggle', {'id': user.id}) }}', { method: 'POST' });
                                 const data = await res.json();
-                                if (res.ok) this.isFollowing = data.isFollowing;
+                                if (res.ok) {
+                                    this.isFollowing = data.isFollowing;
+                                    this.isPending = data.isPending || false;
+                                }
                             } catch(e) { console.error(e); }
                             this.isLoading = false;
+                        },
+                        get label() {
+                            if (this.isFollowing) return 'Siguiendo';
+                            if (this.isPending) return 'Solicitado';
+                            return 'Seguir';
+                        },
+                        get btnStyle() {
+                            if (this.isFollowing) return 'background:var(--os-bg-secondary);color:var(--os-text-primary);';
+                            if (this.isPending) return 'background:transparent;color:var(--os-text-secondary);border:1.5px solid var(--os-border);';
+                            return 'background:#0D0D0D;color:#FFF;';
                         }
                     }">
                         <button @click="toggle()" 
-                                :style="isFollowing ? 'background:var(--os-bg-secondary);color:var(--os-text-primary);' : 'background:#0D0D0D;color:#FFF;'"
+                                :style="btnStyle"
                                 class="os-btn os-btn--sm"
                                 style="border-radius:var(--os-radius-pill);box-shadow:var(--os-shadow-sm);"
                                 :disabled="isLoading">
-                            <span x-text="isFollowing ? 'Siguiendo' : 'Seguir'"></span>
+                            <span x-text="label"></span>
                         </button>
                     </div>
                 {% endif %}
