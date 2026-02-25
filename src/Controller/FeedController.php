@@ -12,7 +12,7 @@ class FeedController extends AbstractController
 {
     #[Route('/feed', name: 'app_feed')]
     #[IsGranted('ROLE_USER')]
-    public function index(OutfitRepository $outfitRepository, \Symfony\Component\HttpFoundation\Request $request): Response
+    public function index(OutfitRepository $outfitRepository, \App\Repository\UserRepository $userRepository, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $search = $request->query->get('q');
         $category = $request->query->get('category'); // Para Ti, Tendencias, etc.
@@ -23,9 +23,16 @@ class FeedController extends AbstractController
         }
 
         $outfits = $outfitRepository->findBySearchAndCategory($search, $category, $this->getUser());
+        
+        $users = [];
+        if ($search) {
+            // Search profiles excluding current user
+            $users = $userRepository->searchProfiles($search, $this->getUser() ? $this->getUser()->getId() : null);
+        }
 
         return $this->render('feed/index.html.twig', [
             'outfits' => $outfits,
+            'users' => $users,
             'currentSearch' => $search,
             'currentCategory' => $category,
         ]);

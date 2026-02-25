@@ -33,28 +33,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Search for users by name, nickname, or bio.
+     * Optionally exclude a specific user ID.
+     */
+    public function searchProfiles(string $query, ?int $excludeUserId = null): array
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.name LIKE :query')
+            ->orWhere('u.nickname LIKE :query')
+            ->orWhere('u.biography LIKE :query')
+            ->setParameter('query', '%' . $query . '%');
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($excludeUserId) {
+            $qb->andWhere('u.id != :excludeId')
+                ->setParameter('excludeId', $excludeUserId);
+        }
+
+        return $qb->orderBy('u.name', 'ASC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult();
+    }
 }

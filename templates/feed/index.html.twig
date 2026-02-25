@@ -16,11 +16,37 @@
     <a href="{{ path('app_feed', {'category': 'Verano 2026'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Verano 2026' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Verano 2026</a>
 </div>
 
+{# Matching Profiles (Search Only) #}
+{% if currentSearch and users is defined and users|length > 0 %}
+    <div class="mb-8">
+        <h2 class="text-xl font-bold text-dark-gray dark:text-white mb-4">Perfiles Encontrados</h2>
+        <div class="flex overflow-x-auto gap-4 pb-4 no-scrollbar scroll-smooth">
+            {% for u in users %}
+                <a href="{{ path('app_profile_show', {'id': u.id}) }}" class="flex flex-col items-center bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-white/[0.12] rounded-2xl p-4 min-w-[140px] max-w-[160px] hover:shadow-lg dark:hover:bg-[#242424] transition-all flex-shrink-0 group">
+                    <div class="w-16 h-16 mb-3 rounded-full overflow-hidden bg-gray-100 dark:bg-[#242424] border-2 border-transparent group-hover:border-neon-lime transition-all">
+                        {% if u.profilePhoto %}
+                            <img src="{{ u.profilePhoto }}" alt="{{ u.name }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-dark-gray dark:text-white font-bold text-xl">
+                                {{ u.name|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <h3 class="font-bold text-sm text-dark-gray dark:text-white text-center truncate w-full">{{ u.name }}</h3>
+                    <p class="text-xs text-gray-500 dark:text-white/50 text-center truncate w-full">@{{ u.nickname }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
 {# Masonry Feed #}
 <div class="px-0 md:px-0">
     {% if outfits|length > 0 %}
         <div class="mb-4 text-center">
-             <span class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-white/30">Últimos looks</span>
+             <span class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-white/30">
+                 {% if currentSearch %}Looks Encontrados{% else %}Últimos looks{% endif %}
+             </span>
         </div>
         
         <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6 space-y-6">
