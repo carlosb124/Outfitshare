@@ -1,27 +1,28 @@
-{# Public Navbar (Whering Style - Transparent) #}
-<nav class="absolute top-0 left-0 w-full z-50 py-6">
-    <div class="container mx-auto px-6 flex justify-between items-center">
+{# Public Navbar — Editorial Fashion Redesign #}
+<nav class="landing-nav" id="landing-nav">
+    <div class="landing-nav__inner">
         {# Logo #}
-        <a href="{{ path('app_landing') }}" class="text-2xl font-extrabold tracking-tighter flex items-center gap-2 group">
-            <div class="w-10 h-10 bg-neon-lime text-black rounded-full flex items-center justify-center transform group-hover:rotate-12 transition-transform">
-                <i class="bi bi-asterisk"></i>
-            </div>
+        <a href="{{ path('app_landing') }}" class="landing-nav__logo">
+            <i class="bi bi-asterisk landing-nav__logo-icon"></i>
             OutfitShare
         </a>
 
         {# Desktop Links #}
-        <div class="hidden md:flex items-center gap-8 font-bold text-sm">
-            <a href="#features" class="hover:text-neon-lime transition-colors">Features</a>
-            <a href="#community" class="hover:text-neon-lime transition-colors">Community</a>
-            <a href="#about" class="hover:text-neon-lime transition-colors">About Us</a>
+        <div class="landing-nav__links">
+            <a href="#features" class="landing-nav__link">Cómo funciona</a>
+            <a href="#community" class="landing-nav__link">Comunidad</a>
+            <a href="#about" class="landing-nav__link">Nuestra historia</a>
         </div>
 
         {# Auth Buttons #}
-        <div class="flex items-center gap-4">
-            <a href="{{ path('app_login') }}" class="font-bold hover:text-neon-lime transition-colors">Login</a>
-            <a href="{{ path('app_register') }}" class="bg-neon-lime text-black px-6 py-2.5 rounded-full font-bold hover:scale-105 transition-transform shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                Sign Up
-            </a>
+        <div class="landing-nav__auth">
+            <a href="{{ path('app_login') }}" class="landing-nav__login">Login</a>
+            <a href="{{ path('app_register') }}" class="landing-nav__signup">Empieza gratis</a>
         </div>
+
+        {# Mobile toggle #}
+        <button class="landing-nav__toggle" aria-label="Abrir navegación">
+            <i class="bi bi-list"></i>
+        </button>
     </div>
 </nav>

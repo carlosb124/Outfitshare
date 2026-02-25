@@ -1,80 +1,77 @@
-{# Outfit Card Component #}
-<div class="group relative bg-white dark:bg-gray-800 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col h-full">
-    
-    {# Image Collage Area #}
-    <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}" class="block relative aspect-[4/5] bg-gray-100 dark:bg-gray-700 overflow-hidden">
-        {# We can create a mini-collage if we have images, or show the first one #}
+{# Outfit Card — uses .os-card for container #}
+<div class="os-card" style="display: flex; flex-direction: column; height: 100%;">
+    <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}" class="outfit-card-collage">
         {% if outfit.prendas|length > 0 %}
-             <div class="grid grid-cols-2 h-full w-full">
+            <div class="outfit-card-collage-grid">
                 {% for prenda in outfit.prendas|slice(0, 4) %}
-                    <div class="relative w-full h-full border-[0.5px] border-white/20">
-                         {% if prenda.imagen %}
-                            <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" alt="{{ prenda.nombre }}" class="w-full h-full object-cover">
+                    <div class="outfit-card-collage-item">
+                        {% if prenda.imagen %}
+                            <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" alt="{{ prenda.nombre }}" loading="lazy">
                         {% else %}
-                             <div class="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-600 text-gray-400">
-                                <i class="bi bi-image"></i>
+                            <div class="outfit-card-collage-empty">
+                                <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
                             </div>
                         {% endif %}
                     </div>
                 {% endfor %}
-                 {# Fill empty slots if < 4 items to keep grid nice, or just let CSS handle it. 
-                    Actually, let's just make it a simple featured image if functionality implies that,
-                    but 'outfit' usually implies a collection. The grid above is a decent collage. #}
             </div>
-            
-            {# Overlay with basic info #}
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                 <span class="text-white font-bold text-sm">Ver Outfit <i class="bi bi-arrow-right ml-1"></i></span>
+            <div class="outfit-card-overlay">
+                <span class="outfit-card-overlay-text">
+                    Ver look
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </span>
             </div>
         {% else %}
-            <div class="w-full h-full flex items-center justify-center text-gray-400 flex-col gap-2">
-                <i class="bi bi-layers text-4xl mb-2"></i>
-                <span class="text-xs font-bold uppercase tracking-wider">Outfit Vacío</span>
+            <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--os-text-tertiary);">
+                <svg width="40" height="40" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 3h-8l-2 4h12z"/>
+                </svg>
+                <span class="os-label">Look vacío</span>
             </div>
         {% endif %}
-        
-        {# Date Badge #}
-        <div class="absolute top-3 right-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-dark-gray dark:text-white shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="os-badge os-badge--float">
             {{ outfit.fechaPublicacion ? outfit.fechaPublicacion|date('d M') : 'Nuevo' }}
         </div>
     </a>
 
-    {# Content Body #}
-    <div class="p-5 flex flex-col flex-1">
-        <div class="flex justify-between items-start mb-3">
+    <div class="outfit-card-body">
+        <div class="outfit-card-body-top">
             <div>
-                 <h3 class="font-bold text-lg text-dark-gray dark:text-gray-400 leading-tight mb-1 group-hover:text-neon-lime transition-colors">
-                    <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}">
-                        {{ outfit.titulo|default('Sin Título') }}
-                    </a>
+                <h3 class="outfit-card-title">
+                    <a href="{{ path('app_outfit_show', {'id': outfit.id}) }}">{{ outfit.titulo|default('Sin título') }}</a>
                 </h3>
-                <div class="flex items-center gap-2">
-                     <div class="w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-600 overflow-hidden">
+                <div class="outfit-card-author">
+                    <div class="outfit-card-avatar">
                         {% if outfit.user.profilePhoto %}
-                            <img src="{{ outfit.user.profilePhoto }}" class="w-full h-full object-cover">
+                            <img src="{{ outfit.user.profilePhoto }}" alt="{{ outfit.user.name }}">
                         {% else %}
-                             <div class="w-full h-full flex items-center justify-center text-[10px] font-bold text-dark-gray dark:text-gray-300">
-                                {{ outfit.user.name|first|upper }}
-                             </div>
+                            {{ outfit.user.name|first|upper }}
                         {% endif %}
                     </div>
-                    <span class="text-xs font-bold text-gray-500 dark:text-gray-500">{{ outfit.user.name }}</span>
+                    <span class="outfit-card-author-name">{{ outfit.user.name }}</span>
                 </div>
             </div>
-            
-            {# Like/Save Buttons (Mock functionality for UI) #}
-            <button class="text-gray-400 hover:text-red-500 transition-colors">
-                <i class="bi bi-heart"></i>
+            <button class="os-btn os-btn--ghost" title="Me gusta">
+                <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
             </button>
         </div>
-
-        <div class="mt-auto pt-4 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between text-xs text-gray-400 font-bold">
-            <span class="flex items-center gap-1">
-                <i class="bi bi-collection"></i> {{ outfit.prendas|length }} Prendas
+        <div class="outfit-card-footer">
+            <span class="outfit-card-count">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 3h-8l-2 4h12z"/>
+                </svg>
+                {{ outfit.prendas|length }} prendas
             </span>
-            <span class="uppercase tracking-wider text-[10px] bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
-                {{ outfit.type ? outfit.type.value : 'Casual' }}
-            </span>
+            <span class="outfit-card-type">{{ outfit.type ? outfit.type.value : 'Casual' }}</span>
         </div>
     </div>
 </div>

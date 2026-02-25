@@ -1,0 +1,29 @@
+{
+  "name": "outfitshare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "tw:build": "npx @tailwindcss/cli -i assets/styles/app.css -o public/css/built_tailwind.css --minify",
+    "tw:watch": "npx @tailwindcss/cli -i assets/styles/app.css -o public/css/built_tailwind.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlosb124/Outfitshare.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/carlosb124/Outfitshare/issues"
+  },
+  "homepage": "https://github.com/carlosb124/Outfitshare#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  }
+}

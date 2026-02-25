@@ -27,19 +27,15 @@ class OutfitRepository extends ServiceEntityRepository
 
         if ($category) {
             switch ($category) {
-                case 'Trending':
+                case 'Tendencias':
                     $qb->leftJoin('o.likes', 'l')
                         ->groupBy('o.id')
                         ->orderBy('COUNT(l.id)', 'DESC');
                     break;
-                case 'Accessories':
-                    // JSON field check not always standard in pure DQL, but we can check if it's not empty textually 
-                    // or just if description/title contains 'accessory' as a fallback?
-                    // Actually, valid JSON array for empty is '[]'. 
-                    // Let's assume non-empty accessories means searching for key words or checking field length > 2
+                case 'Accesorios':
                     $qb->andWhere("o.accessories != '[]' AND o.accessories IS NOT NULL");
                     break;
-                case 'For You':
+                case 'Para Ti':
                     // Default logic (newest)
                     break;
                 default:

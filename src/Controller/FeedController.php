@@ -15,11 +15,11 @@ class FeedController extends AbstractController
     public function index(OutfitRepository $outfitRepository, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $search = $request->query->get('q');
-        $category = $request->query->get('category'); // For You, Trending, etc.
+        $category = $request->query->get('category'); // Para Ti, Tendencias, etc.
 
-        // Default to "For You" (Newest) if nothing set
+        // Default to "Para Ti" (Newest) if nothing set
         if (!$category && !$search) {
-            $category = 'For You';
+            $category = 'Para Ti';
         }
 
         $outfits = $outfitRepository->findBySearchAndCategory($search, $category);

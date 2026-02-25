@@ -1,74 +1,95 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Item - OutfitShare{% endblock %}
+{% block title %}Editar prenda - OutfitShare{% endblock %}
 
 {% block body %}
-<div class="flex justify-center py-10">
-    <div class="w-full max-w-lg">
-        <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 relative overflow-hidden">
-             {# Decoration #}
-            <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-neon-lime/20 blur-2xl"></div>
+<div class="os-page--xs" x-data="{ showDeleteModal: false }">
+    <div class="os-card" style="padding:32px;position:relative;overflow:hidden;">
+        {# Decoration blur #}
+        <div style="position:absolute;top:-64px;right:-64px;width:128px;height:128px;border-radius:50%;background:rgba(181,255,46,0.15);filter:blur(40px);pointer-events:none;"></div>
 
-            {# Header #}
-            <div class="flex items-center mb-8 relative">
-                <a href="{{ path('app_prenda_index') }}" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-dark-gray hover:bg-gray-200 transition-colors mr-4">
-                    <i class="bi bi-arrow-left text-lg"></i>
-                </a>
-                <div>
-                    <h2 class="font-extrabold text-2xl text-dark-gray">Edit Item</h2>
-                    <p class="text-gray-400 text-sm">Update item details</p>
-                </div>
+        {# Header #}
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:32px;position:relative;">
+            <a href="{{ path('app_prenda_index') }}" class="settings-back">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </a>
+            <div>
+                <h2 class="os-title os-title--sm">Editar prenda</h2>
+                <p class="os-subtitle">Actualiza los datos de la prenda</p>
+            </div>
+        </div>
+
+        {# Current Image Preview #}
+        {% if prenda.imagen %}
+            <div class="armario-form-preview">
+                <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" alt="{{ prenda.nombre }}">
+                <p class="os-hint" style="margin-top:8px;">Imagen actual</p>
+            </div>
+        {% endif %}
+
+        {{ form_start(form, {'attr': {'style': 'display:flex;flex-direction:column;gap:0;', 'enctype': 'multipart/form-data'}}) }}
+            
+            <div class="os-field">
+                {{ form_label(form.nombre) }}
+                {{ form_widget(form.nombre) }}
+                {{ form_errors(form.nombre) }}
             </div>
 
-            {# Current Image Preview #}
-            {% if prenda.imagen %}
-                <div class="mb-8 text-center bg-gray-50 rounded-2xl p-4 border border-gray-100">
-                     <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" 
-                          class="rounded-xl shadow-sm mx-auto h-40 object-cover" 
-                          alt="{{ prenda.nombre }}">
-                     <p class="text-xs text-gray-400 mt-2 font-medium">Currently used image</p>
-                </div>
-            {% endif %}
+            <div class="os-field">
+                {{ form_label(form.marca) }}
+                {{ form_widget(form.marca) }}
+                {{ form_errors(form.marca) }}
+            </div>
 
-            {{ form_start(form, {'attr': {'class': 'space-y-5', 'enctype': 'multipart/form-data'}}) }}
-                
-                <div>
-                    {{ form_label(form.nombre) }}
-                    {{ form_widget(form.nombre) }}
-                    {{ form_errors(form.nombre, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                </div>
+            <div class="os-field">
+                {{ form_label(form.categoria) }}
+                {{ form_widget(form.categoria) }}
+                {{ form_errors(form.categoria) }}
+            </div>
 
-                <div>
-                    {{ form_label(form.marca) }}
-                    {{ form_widget(form.marca) }}
-                    {{ form_errors(form.marca, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                </div>
+            <div class="os-field">
+                {{ form_label(form.imagenFile, 'Cambiar imagen (opcional)') }}
+                {{ form_widget(form.imagenFile) }}
+                {{ form_errors(form.imagenFile) }}
+                <p class="os-hint">Formatos: JPG, PNG, WebP (máx. 5 MB)</p>
+            </div>
 
-                <div>
-                    {{ form_label(form.categoria) }}
-                    {{ form_widget(form.categoria) }}
-                    {{ form_errors(form.categoria, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                </div>
-
-                <div class="p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                    {{ form_label(form.imagenFile, 'Change Image (Optional)') }}
-                    {{ form_widget(form.imagenFile) }}
-                    {{ form_errors(form.imagenFile, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                    <p class="text-xs text-gray-400 mt-2">Supports JPG, PNG, WebP (Max 5MB)</p>
-                </div>
-
-                <div class="pt-4 grid grid-cols-2 gap-4">
-                     <a href="{{ path('app_prenda_delete', {'id': prenda.id}) }}" 
-                        onclick="return confirm('¿Seguro que quieres borrarlo?')"
-                        class="bg-gray-100 text-red-500 font-bold py-3.5 rounded-xl flex items-center justify-center hover:bg-red-50 transition-colors">
-                        <i class="bi bi-trash me-2"></i>Delete
-                    </a>
-                    <button type="submit" class="bg-dark-gray text-white font-extrabold py-3.5 rounded-xl shadow-md hover:bg-black transition-all transform hover:-translate-y-0.5">
-                        <i class="bi bi-save me-2"></i>Save Changes
-                    </button>
-                </div>
-            {{ form_end(form) }}
-        </div>
+            <div style="padding-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <button type="button" class="os-btn os-btn--destructive" @click="showDeleteModal = true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    Eliminar
+                </button>
+                <button type="submit" class="os-btn os-btn--primary os-btn--block">
+                    Guardar cambios
+                </button>
+            </div>
+        {{ form_end(form) }}
     </div>
+
+    {# Delete Confirmation Modal #}
+    <template x-if="showDeleteModal">
+        <div class="armario-modal-overlay" @click.self="showDeleteModal = false" @keydown.escape.window="showDeleteModal = false">
+            <div class="armario-modal-box" @click.stop>
+                <svg width="48" height="48" viewBox="0 0 24 24" stroke="#C0392B" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+                <h3 class="armario-modal-title">¿Eliminar esta prenda?</h3>
+                <p class="armario-modal-desc">
+                    Esta acción no se puede deshacer. La prenda se eliminará permanentemente de tu armario y de todos los looks que la contengan.
+                </p>
+                <div class="armario-modal-actions">
+                    <button class="os-btn os-btn--outline os-btn--sm" @click="showDeleteModal = false">Cancelar</button>
+                    <a href="{{ path('app_prenda_delete', {'id': prenda.id}) }}" class="os-btn os-btn--sm" style="background:#C0392B;color:#FFF;text-decoration:none;">
+                        Sí, eliminar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </template>
 </div>
 {% endblock %}

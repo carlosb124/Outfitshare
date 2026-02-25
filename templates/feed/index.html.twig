@@ -1,26 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}OutfitShare - Discover Style{% endblock %}
+{% block title %}OutfitShare - Descubre tu estilo{% endblock %}
 
 {% block body %}
 {# Pills Nav / Categories #}
-<div class="flex overflow-x-auto pb-6 gap-3 mb-8 no-scrollbar scroll-smooth">
-    {% set currentCat = currentCategory|default('For You') %}
+<div class="flex overflow-x-auto pb-6 gap-2 mb-8 no-scrollbar scroll-smooth">
+    {% set currentCat = currentCategory|default('Para Ti') %}
     
-    <a href="{{ path('app_feed', {'category': 'For You'}) }}" class="px-6 py-2.5 rounded-full font-bold whitespace-nowrap shadow-sm transition-all {{ currentCat == 'For You' ? 'bg-neon-lime text-black shadow-neon-lime/20 transform -translate-y-0.5 font-extrabold' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700' }}">For You</a>
-    <a href="{{ path('app_feed', {'category': 'Trending'}) }}" class="px-6 py-2.5 rounded-full font-bold whitespace-nowrap shadow-sm transition-all {{ currentCat == 'Trending' ? 'bg-neon-lime text-black shadow-neon-lime/20 transform -translate-y-0.5 font-extrabold' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700' }}">Trending</a>
-    <a href="{{ path('app_feed', {'category': 'Streetwear'}) }}" class="px-6 py-2.5 rounded-full font-bold whitespace-nowrap shadow-sm transition-all {{ currentCat == 'Streetwear' ? 'bg-neon-lime text-black shadow-neon-lime/20 transform -translate-y-0.5 font-extrabold' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700' }}">Streetwear</a>
-    <a href="{{ path('app_feed', {'category': 'Vintage'}) }}" class="px-6 py-2.5 rounded-full font-bold whitespace-nowrap shadow-sm transition-all {{ currentCat == 'Vintage' ? 'bg-neon-lime text-black shadow-neon-lime/20 transform -translate-y-0.5 font-extrabold' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700' }}">Vintage</a>
-    <a href="{{ path('app_feed', {'category': 'Formal'}) }}" class="px-6 py-2.5 rounded-full font-bold whitespace-nowrap shadow-sm transition-all {{ currentCat == 'Formal' ? 'bg-neon-lime text-black shadow-neon-lime/20 transform -translate-y-0.5 font-extrabold' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700' }}">Formal</a>
-    <a href="{{ path('app_feed', {'category': 'Accessories'}) }}" class="px-6 py-2.5 rounded-full font-bold whitespace-nowrap shadow-sm transition-all {{ currentCat == 'Accessories' ? 'bg-neon-lime text-black shadow-neon-lime/20 transform -translate-y-0.5 font-extrabold' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700' }}">Accessories</a>
-    <a href="{{ path('app_feed', {'category': 'Summer 2026'}) }}" class="px-6 py-2.5 rounded-full font-bold whitespace-nowrap shadow-sm transition-all {{ currentCat == 'Summer 2026' ? 'bg-neon-lime text-black shadow-neon-lime/20 transform -translate-y-0.5 font-extrabold' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700' }}">Summer 2026</a>
+    <a href="{{ path('app_feed', {'category': 'Para Ti'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Para Ti' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Para Ti</a>
+    <a href="{{ path('app_feed', {'category': 'Tendencias'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Tendencias' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Tendencias</a>
+    <a href="{{ path('app_feed', {'category': 'Streetwear'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Streetwear' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Streetwear</a>
+    <a href="{{ path('app_feed', {'category': 'Vintage'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Vintage' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Vintage</a>
+    <a href="{{ path('app_feed', {'category': 'Formal'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Formal' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Formal</a>
+    <a href="{{ path('app_feed', {'category': 'Accesorios'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Accesorios' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Accesorios</a>
+    <a href="{{ path('app_feed', {'category': 'Verano 2026'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Verano 2026' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Verano 2026</a>
 </div>
 
 {# Masonry Feed #}
 <div class="px-0 md:px-0">
     {% if outfits|length > 0 %}
         <div class="mb-4 text-center">
-             <span class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Fresh Drops</span>
+             <span class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-white/30">Últimos looks</span>
         </div>
         
         <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6 space-y-6">
@@ -29,16 +29,58 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="flex flex-col items-center justify-center py-20">
-            <div class="w-24 h-24 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg mb-6 border border-gray-100 dark:border-gray-700">
-                <i class="bi bi-stars text-4xl text-neon-lime"></i>
+        {# ══════════════════════════════════════════
+           EMPTY STATE — Redesigned per audit
+           ══════════════════════════════════════════ #}
+        <div class="flex flex-col items-center justify-center py-24 empty-state-enter" role="status" aria-label="No hay looks todavía">
+            {# Icon container with breathing animation #}
+            <div class="w-20 h-20 bg-gray-100 dark:bg-[#1A1A1A] rounded-full flex items-center justify-center mb-6 empty-state-pulse">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 dark:text-white/40">
+                    {# Hanger icon #}
+                    <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7l7 5.2a2 2 0 0 1-1.2 3.6H5.2a2 2 0 0 1-1.2-3.6L11 7V5.73A2 2 0 0 1 12 2z"/>
+                    <line x1="5" y1="15.8" x2="5" y2="20"/>
+                    <line x1="19" y1="15.8" x2="19" y2="20"/>
+                </svg>
             </div>
-            <h3 class="text-3xl font-extrabold text-dark-gray dark:text-white mb-2">Be the first to inspire!</h3>
-            <p class="text-gray-400 mb-8">No outfits yet. Share your unique style with the world.</p>
-            <a href="{{ path('app_outfit_new') }}" class="bg-neon-lime text-dark-gray px-8 py-3.5 rounded-full font-bold shadow-lg hover:shadow-neon-lime/50 transition-all transform hover:-translate-y-1">
-                Create First Outfit
+
+            {# Title — Playfair Display #}
+            <h3 class="text-2xl font-bold text-dark-gray dark:text-[#F0F0F0] mb-3" style="font-family: 'Playfair Display', Georgia, serif;">
+                Tu feed está a punto de llenarse.
+            </h3>
+
+            {# Description #}
+            <p class="text-gray-500 dark:text-white/45 text-sm leading-relaxed max-w-xs text-center mb-8">
+                Sube tu primera prenda y empieza a crear looks en segundos.
+            </p>
+
+            {# CTA — Black in light mode, green in dark mode #}
+            <a href="{{ path('app_outfit_new') }}" 
+               class="bg-neon-lime text-black px-8 py-3.5 rounded-full font-bold transition-all transform hover:-translate-y-0.5 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-neon-lime">
+                Crear mi primer look
             </a>
         </div>
+
+        {# Empty state animations #}
+        <style>
+            @keyframes emptyStateFadeIn {
+                from { opacity: 0; transform: translateY(16px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes emptyStatePulse {
+                0%, 100% { transform: scale(1); }
+                50%      { transform: scale(1.06); }
+            }
+            .empty-state-enter {
+                animation: emptyStateFadeIn 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 150ms both;
+            }
+            .empty-state-pulse {
+                animation: emptyStatePulse 3s ease-in-out infinite;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .empty-state-enter { animation: none; opacity: 1; }
+                .empty-state-pulse { animation: none; }
+            }
+        </style>
     {% endif %}
 </div>
 {% endblock %}

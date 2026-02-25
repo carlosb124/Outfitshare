@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}OutfitShare - The Social Wardrobe{% endblock %}
+{% block title %}OutfitShare — Tu armario inteligente{% endblock %}
+
+{# Load landing-specific CSS #}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
+{% endblock %}
 
 {# Override default navbar #}
 {% block navbar %}
@@ -8,103 +14,124 @@
 {% endblock %}
 
 {% block body %}
-    {# 1. HERO SECTION #}
-    <section class="relative pt-32 pb-20 overflow-hidden bg-off-white">
-        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            {# Text #}
-            <div class="relative z-10 text-center md:text-left">
-                <span class="inline-block bg-lavender px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6 animate-fade-in-up">
-                    ✨ Your digital closet
-                </span>
-                <h1 class="text-5xl md:text-7xl font-extrabold leading-[0.9] tracking-tight mb-8">
-                    Discover your best wardrobe
-                    <span class="text-neon-lime">for you</span>.
-                </h1>
-                <p class="text-lg md:text-xl text-gray-700 mb-10 max-w-lg mx-auto md:mx-0">
-                    Digitise your wardrobe, see what you own, and get styling suggestions. Good for your wallet, better for the planet.
-                </p>
-                
-                <div class="flex flex-col md:flex-row gap-4 justify-center md:justify-start">
-                    <a href="{{ path('app_register') }}" class="bg-black text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-[6px_6px_0px_0px_rgba(198,244,2,1)] transition-all flex items-center justify-center gap-2">
-                        <i class="bi bi-apple"></i> Download App
-                    </a>
-                    <a href="{{ path('app_feed') }}" class="bg-white border-2 border-black text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
-                        View Web Feed <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
+<div class="landing-page">
+
+    {# ══════════════════════════════════════════
+       1. HERO SECTION
+       ══════════════════════════════════════════ #}
+    <section class="hero">
+        <div class="page-container">
+            <span class="hero__badge">Tu armario digital</span>
+
+            <h1 class="hero__title">
+                Tu armario.
+                <span class="hero__title-accent">Reinventado.</span>
+            </h1>
+
+            <p class="hero__subtitle">
+                Fotografía tu ropa, organízala en segundos y descubre outfits que ya tienes. Compra menos, viste mejor.
+            </p>
+
+            <div class="hero__ctas">
+                <a href="{{ path('app_register') }}" class="hero__cta-primary">
+                    <i class="bi bi-apple"></i> Descargar la app
+                </a>
+                <a href="{{ path('app_feed') }}" class="hero__cta-secondary">
+                    Ver cómo funciona <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
 
-            {# Hero Image (Collage) #}
-            <div class="relative">
-                <div class="absolute -top-20 -right-20 w-96 h-96 bg-lavender rounded-full blur-3xl opacity-50"></div>
-                <div class="relative z-10 grid grid-cols-2 gap-4 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80" class="rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black object-cover h-64 w-full">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=80" class="rounded-3xl shadow-[8px_8px_0px_0px_rgba(198,244,2,1)] border-2 border-black object-cover h-64 w-full mt-12">
-                    <img src="https://i.pinimg.com/736x/9b/e4/44/9be44457b34d1f5827db6e1dc060882f.jpg" class="rounded-3xl shadow-[8px_8px_0px_0px_rgba(198,244,2,1)] border-2 border-black object-cover h-64 w-full -mt-12">
-                    <img src="https://images.unsplash.com/photo-1545291730-faff8ca1d4b0?w=500&q=80" class="rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black object-cover h-64 w-full">
+            {# Photo Grid #}
+            <div class="hero__grid">
+                <div class="hero__grid-item">
+                    <img src="https://i.pinimg.com/originals/d0/f3/de/d0f3de714baa0bf50c016f15be08804b.jpg" alt="Look de moda" loading="lazy">
+                </div>
+                <div class="hero__grid-item">
+                    <img src="https://cdn.pixabay.com/photo/2021/10/21/15/14/fashion-6729394_1280.jpg" alt="Estilo de compra" loading="lazy">
+                </div>
+                <div class="hero__grid-item">
+                    <img src="https://i.pinimg.com/736x/9b/e4/44/9be44457b34d1f5827db6e1dc060882f.jpg" alt="Street style" loading="lazy">
+                </div>
+                <div class="hero__grid-item">
+                    <img src="https://i.pinimg.com/564x/c0/86/0b/c0860bac36b99aef43f29e4e9081f909.jpg" alt="Inspiración de outfit" loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
-    {# 2. LOGOS / AS SEEN ON #}
-    <section class="bg-lavender py-10 border-y-2 border-black overflow-hidden whitespace-nowrap">
-        <div class="container mx-auto px-6 relative flex items-center justify-center md:justify-start">
-            <span class="font-bold uppercase text-sm mr-12 shrink-0 hidden md:inline-block">As seen in</span>
-            <div class="flex gap-12 md:gap-16 opacity-70 font-black text-xl md:text-2xl tracking-widest items-center flex-wrap justify-center">
-                <span>VOGUE</span>
-                <span>FORBES</span>
-                <span>ELLE</span>
-                <span>BAZAAR</span>
-                <span>REFINERY29</span>
-                <span>VICE</span>
+    {# ══════════════════════════════════════════
+       2. TRUST BAR — Destacado en
+       ══════════════════════════════════════════ #}
+    <section class="trust-bar">
+        <div class="page-container">
+            <div class="trust-bar__inner">
+                <span class="trust-bar__label">Destacado en</span>
+                <div class="trust-bar__names">
+                    <span class="trust-bar__name">VOGUE</span>
+                    <span class="trust-bar__separator">·</span>
+                    <span class="trust-bar__name">FORBES</span>
+                    <span class="trust-bar__separator">·</span>
+                    <span class="trust-bar__name">ELLE</span>
+                    <span class="trust-bar__separator">·</span>
+                    <span class="trust-bar__name">BAZAAR</span>
+                    <span class="trust-bar__separator">·</span>
+                    <span class="trust-bar__name">REFINERY29</span>
+                    <span class="trust-bar__separator">·</span>
+                    <span class="trust-bar__name">VICE</span>
+                </div>
             </div>
         </div>
     </section>
 
-    {# 3. FEATURES #}
-    <section id="features" class="py-24 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-20 items-center">
-                {# Image #}
-                <div class="order-2 md:order-1 relative">
-                    <div class="absolute inset-0 bg-neon-lime rounded-[3rem] transform translate-x-4 translate-y-4 border-2 border-black"></div>
-                    <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=80" class="relative z-10 rounded-[3rem] border-2 border-black w-full shadow-xl">
+    {# ══════════════════════════════════════════
+       3. EDITORIAL IMAGE — Foto del armario
+       ══════════════════════════════════════════ #}
+    <div class="page-container" style="margin-top: 0; margin-bottom: 0;">
+        <section class="editorial fade-in-up" style="margin-top: 48px;">
+            <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200&q=80" alt="Armario organizado digitalmente" class="editorial__img">
+            <div class="editorial__overlay">
+                <span class="editorial__label">Tu armario digital</span>
+                <h2 class="editorial__heading">Todo lo que tienes. Siempre a mano.</h2>
+            </div>
+        </section>
+    </div>
+
+    {# ══════════════════════════════════════════
+       4. TRES PASOS — Cómo funciona
+       ══════════════════════════════════════════ #}
+    <section id="features" class="steps-section">
+        <div class="page-container">
+            <div class="steps-section__inner">
+                {# Columna izquierda: Título #}
+                <div class="steps-section__header">
+                    <div class="steps-section__label">Cómo funciona</div>
+                    <h2 class="steps-section__title">Tu armario digital, en tres pasos.</h2>
+                    <p class="steps-section__desc">Fotografía tu ropa, crea looks y deja que nuestro Generador de Looks te sorprenda — todo gratis.</p>
                 </div>
 
-                {# Content #}
-                <div class="order-1 md:order-2">
-                    <h2 class="text-4xl md:text-6xl font-extrabold mb-12 leading-tight">
-                        Wardrobe bliss in <br>
-                        <span class="text-lavender bg-black px-2">three steps</span>
-                    </h2>
-
-                    <div class="space-y-10">
-                        {# Feature 1 #}
-                        <div class="flex gap-6 group">
-                            <div class="w-16 h-16 shrink-0 bg-neon-lime rounded-full border-2 border-black flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">1</div>
-                            <div>
-                                <h3 class="text-2xl font-bold mb-2">Snap & Upload</h3>
-                                <p class="text-gray-500 text-lg">Add your clothes in seconds. We remove the background automatically so you can focus on styling.</p>
-                            </div>
+                {# Columna derecha: Pasos #}
+                <div class="steps-list">
+                    <div class="step-item" data-step-delay="0">
+                        <div class="step-item__number">1</div>
+                        <div class="step-item__content">
+                            <h3 class="step-item__title">Fotografía tu ropa</h3>
+                            <p class="step-item__desc">Una foto de cada prenda. Nosotros eliminamos el fondo automáticamente — tú solo piensa en el estilo.</p>
                         </div>
+                    </div>
 
-                        {# Feature 2 #}
-                        <div class="flex gap-6 group">
-                            <div class="w-16 h-16 shrink-0 bg-lavender rounded-full border-2 border-black flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">2</div>
-                            <div>
-                                <h3 class="text-2xl font-bold mb-2">Create Outfits</h3>
-                                <p class="text-gray-500 text-lg">Mix and match items on our "Clueless-style" canvas. Plan looks for work, dates, or travel.</p>
-                            </div>
+                    <div class="step-item" data-step-delay="120">
+                        <div class="step-item__number">2</div>
+                        <div class="step-item__content">
+                            <h3 class="step-item__title">Crea tus looks</h3>
+                            <p class="step-item__desc">Combina prendas en un lienzo visual. Planifica outfits para el trabajo, una cita o un viaje — todo con lo que ya tienes.</p>
                         </div>
+                    </div>
 
-                        {# Feature 3 #}
-                        <div class="flex gap-6 group">
-                             <div class="w-16 h-16 shrink-0 bg-black text-neon-lime rounded-full border-2 border-black flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">3</div>
-                            <div>
-                                <h3 class="text-2xl font-bold mb-2">Get Styled</h3>
-                                <p class="text-gray-500 text-lg">Don't know what to wear? Let our "Randomizer" suggest combos you never thought of.</p>
-                            </div>
+                    <div class="step-item" data-step-delay="240">
+                        <div class="step-item__number">3</div>
+                        <div class="step-item__content">
+                            <h3 class="step-item__title">Déjate sorprender</h3>
+                            <p class="step-item__desc">¿Sin ideas hoy? El Generador de Looks combina tu ropa de formas que nunca habrías imaginado.</p>
                         </div>
                     </div>
                 </div>
@@ -112,53 +139,128 @@
         </div>
     </section>
 
-    {# 4. COMMUNITY #}
-    <section id="community" class="py-24 bg-off-white">
-         <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-6xl font-extrabold mb-4">Join 2M+ Wherers</h2>
-            <p class="text-xl text-gray-500 mb-16 max-w-2xl mx-auto">Real people, real wardrobes. Get inspired by how others style the same items you own.</p>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                 <div class="relative group cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=600&q=80" class="h-80 w-full object-cover rounded-2xl border-2 border-black group-hover:-translate-y-2 transition-transform duration-300">
-                    <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full border border-black text-xs font-bold">@sarah_style</div>
-                 </div>
-                 <div class="relative group cursor-pointer md:mt-12">
-                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&q=80" class="h-80 w-full object-cover rounded-2xl border-2 border-black group-hover:-translate-y-2 transition-transform duration-300">
-                    <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full border border-black text-xs font-bold">@mike_drips</div>
-                 </div>
-                 <div class="relative group cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1506634572416-48cdfe530110?w=600&q=80" class="h-80 w-full object-cover rounded-2xl border-2 border-black group-hover:-translate-y-2 transition-transform duration-300">
-                    <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full border border-black text-xs font-bold">@elena_wears</div>
-                 </div>
-                 <div class="relative group cursor-pointer md:mt-12">
-                    <img src="https://images.unsplash.com/photo-1520024146169-3240400354ae?w=600&q=80" class="h-80 w-full object-cover rounded-2xl border-2 border-black group-hover:-translate-y-2 transition-transform duration-300">
-                    <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full border border-black text-xs font-bold">@alex_fits</div>
-                 </div>
+    {# ══════════════════════════════════════════
+       5. COMUNIDAD (Fondo oscuro)
+       ══════════════════════════════════════════ #}
+    <section id="community" class="community">
+        <div class="page-container">
+            {# Cabecera #}
+            <div class="community__header">
+                <div class="community__label">Comunidad</div>
+                <div class="community__counter">
+                    <span class="community__number">2M+</span>
+                    <span class="community__word">armarios</span>
+                </div>
+                <p class="community__subtitle">Descubre cómo otras personas combinan exactamente las mismas prendas que ya tienes en tu armario.</p>
             </div>
-             
-             <div class="mt-16">
-                 <a href="{{ path('app_register') }}" class="inline-block bg-neon-lime px-12 py-5 rounded-full text-xl font-black border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all">
-                     Join the Community
-                 </a>
-             </div>
-         </div>
+
+            {# Grid de fotos #}
+            <div class="community__grid">
+                <div class="community__card">
+                    <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=600&q=80" alt="Outfit de @sarah_style" loading="lazy">
+                    <span class="community__badge">@sarah_style</span>
+                </div>
+                <div class="community__card">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&q=80" alt="Outfit de @mike_drips" loading="lazy">
+                    <span class="community__badge">@mike_drips</span>
+                </div>
+                <div class="community__card">
+                    <img src="https://images.unsplash.com/photo-1506634572416-48cdfe530110?w=600&q=80" alt="Outfit de @elena_wears" loading="lazy">
+                    <span class="community__badge">@elena_wears</span>
+                </div>
+                <div class="community__card">
+                    <img src="https://images.unsplash.com/photo-1520024146169-3240400354ae?w=600&q=80" alt="Outfit de @alex_fits" loading="lazy">
+                    <span class="community__badge">@alex_fits</span>
+                </div>
+            </div>
+        </div>
     </section>
 
-    {# FOOTER #}
-    <footer class="bg-black text-white py-12">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-2xl font-extrabold flex items-center gap-2">
-                <i class="bi bi-asterisk text-neon-lime"></i> OutfitShare
-            </div>
-            <div class="flex gap-8 text-sm font-bold text-gray-400">
-                <a href="#" class="hover:text-white">Privacy</a>
-                <a href="#" class="hover:text-white">Terms</a>
-                <a href="#" class="hover:text-white">Contact</a>
-            </div>
-            <div class="text-gray-500 text-sm">
-                &copy; {{ "now"|date("Y") }} OutfitShare Inc.
+    {# ══════════════════════════════════════════
+       6. CTA FINAL
+       ══════════════════════════════════════════ #}
+    <section class="cta-final">
+        <div class="page-container">
+            <a href="{{ path('app_register') }}" class="cta-final__btn">
+                Crea tu armario gratis
+            </a>
+        </div>
+    </section>
+
+    {# ══════════════════════════════════════════
+       7. FOOTER
+       ══════════════════════════════════════════ #}
+    <footer class="landing-footer">
+        <div class="page-container">
+            <div class="landing-footer__inner">
+                <div class="landing-footer__brand">
+                    <a href="{{ path('app_landing') }}" class="landing-footer__logo">
+                        <i class="bi bi-asterisk landing-footer__logo-icon"></i>
+                        OutfitShare
+                    </a>
+                    <span class="landing-footer__tagline">Tu armario inteligente.</span>
+                </div>
+                <div class="landing-footer__links">
+                    <a href="#" class="landing-footer__link">Privacidad</a>
+                    <a href="#" class="landing-footer__link">Términos</a>
+                    <a href="#" class="landing-footer__link">Contacto</a>
+                </div>
+                <div class="landing-footer__copy">
+                    &copy; {{ "now"|date("Y") }} OutfitShare Inc.
+                </div>
             </div>
         </div>
     </footer>
+
+</div>
+
+{# ══════════════════════════════════════════
+   LANDING PAGE JAVASCRIPT
+   ══════════════════════════════════════════ #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // -- Navbar scroll effect --
+    const nav = document.getElementById('landing-nav');
+    if (nav) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 60) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }, { passive: true });
+    }
+
+    // -- IntersectionObserver for fade-in-up elements --
+    const fadeEls = document.querySelectorAll('.fade-in-up');
+    if (fadeEls.length && 'IntersectionObserver' in window) {
+        const fadeObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        fadeEls.forEach(function(el) { fadeObserver.observe(el); });
+    }
+
+    // -- IntersectionObserver for step items (staggered) --
+    const stepItems = document.querySelectorAll('.step-item');
+    if (stepItems.length && 'IntersectionObserver' in window) {
+        const stepObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.getAttribute('data-step-delay') || '0', 10);
+                    setTimeout(function() {
+                        entry.target.classList.add('visible');
+                    }, delay);
+                    stepObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        stepItems.forEach(function(el) { stepObserver.observe(el); });
+    }
+});
+</script>
 {% endblock %}
