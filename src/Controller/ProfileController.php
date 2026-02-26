@@ -45,7 +45,7 @@ class ProfileController extends AbstractController
                     $secureUrl = $cloudinaryService->uploadImage($profileFile, 'outfitshare/avatars');
                     $user->setProfilePhoto($secureUrl);
                 } catch (\Exception $e) {
-                    $this->addFlash('error', 'Error al subir la foto de perfil a Cloudinary.');
+                    $this->addFlash('error', 'Error al subir la foto de perfil a Cloudinary: ' . $e->getMessage());
                 }
             }
 
@@ -57,7 +57,7 @@ class ProfileController extends AbstractController
                     $secureUrl = $cloudinaryService->uploadImage($bannerFile, 'outfitshare/banners');
                     $user->setBannerPhoto($secureUrl);
                 } catch (\Exception $e) {
-                    $this->addFlash('error', 'Error al subir el banner a Cloudinary.');
+                    $this->addFlash('error', 'Error al subir el banner a Cloudinary: ' . $e->getMessage());
                 }
             }
 

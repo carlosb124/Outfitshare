@@ -43,7 +43,7 @@ class PrendaController extends AbstractController
                     $secureUrl = $cloudinaryService->uploadImage($imagenFile, 'outfitshare/prendas');
                     $prenda->setImagen($secureUrl);
                 } catch (\Exception $e) {
-                    $this->addFlash('error', 'Error al subir la imagen a Cloudinary.');
+                    $this->addFlash('error', 'Error al subir la imagen a Cloudinary: ' . $e->getMessage());
                 }
             }
 
