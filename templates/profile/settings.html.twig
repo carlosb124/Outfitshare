@@ -26,7 +26,7 @@
                 </h3>
                 
                 <div class="settings-photos-grid">
-                    <div x-data="{ photoPreview: '{{ app.user.profilePhoto|default(null) }}' }">
+                    <div x-data="{ photoPreview: '{{ app.user.profilePhotoUrl|default(null) }}' }">
                         <span class="os-label" style="display:block;margin-bottom:8px;font-size:13px;color:var(--os-text-primary);">Foto de perfil</span>
                         <div class="settings-avatar-row">
                             <div class="settings-avatar" @click="$refs.profileInput.click()">
@@ -66,7 +66,7 @@
                         {{ form_errors(form.profilePhoto) }}
                     </div>
 
-                    <div x-data="{ bannerPreview: '{{ app.user.bannerPhoto|default(null) }}' }">
+                    <div x-data="{ bannerPreview: '{{ app.user.bannerPhotoUrl|default(null) }}' }">
                         <span class="os-label" style="display:block;margin-bottom:8px;font-size:13px;color:var(--os-text-primary);">Foto de portada</span>
                         <div class="settings-banner-zone" @click="$refs.bannerInput.click()">
                             <template x-if="bannerPreview"><img :src="bannerPreview" alt="Portada"></template>

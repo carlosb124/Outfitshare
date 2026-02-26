@@ -80,6 +80,24 @@ class Prenda
         return $this->imagen;
     }
 
+    /**
+     * Helper to return the full URL of the image, whether it's local or from Cloudinary
+     */
+    public function getImagenUrl(): ?string
+    {
+        if (!$this->imagen) {
+            return null;
+        }
+
+        // Check if it's already a full HTTP URL (Cloudinary)
+        if (str_starts_with($this->imagen, 'http://') || str_starts_with($this->imagen, 'https://')) {
+            return $this->imagen;
+        }
+
+        // Fallback for legacy local images
+        return 'uploads/images/' . $this->imagen;
+    }
+
     public function setImagen(?string $imagen): static
     {
         $this->imagen = $imagen;

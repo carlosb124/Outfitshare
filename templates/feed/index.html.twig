@@ -23,9 +23,9 @@
         <div class="flex overflow-x-auto gap-4 pb-4 no-scrollbar scroll-smooth">
             {% for u in users %}
                 <a href="{{ path('app_profile_show', {'id': u.id}) }}" class="flex flex-col items-center bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-white/[0.12] rounded-2xl p-4 min-w-[140px] max-w-[160px] hover:shadow-lg dark:hover:bg-[#242424] transition-all flex-shrink-0 group">
-                    <div class="w-16 h-16 mb-3 rounded-full overflow-hidden bg-gray-100 dark:bg-[#242424] border-2 border-transparent group-hover:border-neon-lime transition-all">
-                        {% if u.profilePhoto %}
-                            <img src="{{ u.profilePhoto }}" alt="{{ u.name }}" class="w-full h-full object-cover">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-white/[0.05]">
+                        {% if u.profilePhotoUrl %}
+                            <img src="{{ u.profilePhotoUrl }}" alt="{{ u.name }}" class="w-full h-full object-cover">
                         {% else %}
                             <div class="w-full h-full flex items-center justify-center text-dark-gray dark:text-white font-bold text-xl">
                                 {{ u.name|first|upper }}

@@ -29,7 +29,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/settings', name: 'app_profile_settings', methods: ['GET', 'POST'])]
-    public function settings(Request $request, EntityManagerInterface $entityManager, \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $params): Response
+    public function settings(Request $request, EntityManagerInterface $entityManager, \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $params, \App\Service\CloudinaryService $cloudinaryService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -41,17 +41,11 @@ class ProfileController extends AbstractController
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $profileFile */
             $profileFile = $form->get('profilePhoto')->getData();
             if ($profileFile) {
-                $originalFilename = pathinfo($profileFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = uniqid() . '.' . $profileFile->guessExtension();
-
                 try {
-                    $profileFile->move(
-                        $this->getParameter('kernel.project_dir') . '/public/uploads/images',
-                        $newFilename
-                    );
-                    $user->setProfilePhoto('/uploads/images/' . $newFilename);
+                    $secureUrl = $cloudinaryService->uploadImage($profileFile, 'outfitshare/avatars');
+                    $user->setProfilePhoto($secureUrl);
                 } catch (\Exception $e) {
-                    // ... handle exception if something happens during file upload
+                    $this->addFlash('error', 'Error al subir la foto de perfil a Cloudinary.');
                 }
             }
 
@@ -59,15 +53,11 @@ class ProfileController extends AbstractController
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $bannerFile */
             $bannerFile = $form->get('bannerPhoto')->getData();
             if ($bannerFile) {
-                $newBannerFilename = uniqid() . '_banner.' . $bannerFile->guessExtension();
                 try {
-                    $bannerFile->move(
-                        $this->getParameter('kernel.project_dir') . '/public/uploads/images',
-                        $newBannerFilename
-                    );
-                    $user->setBannerPhoto('/uploads/images/' . $newBannerFilename);
+                    $secureUrl = $cloudinaryService->uploadImage($bannerFile, 'outfitshare/banners');
+                    $user->setBannerPhoto($secureUrl);
                 } catch (\Exception $e) {
-                    // ... handle exception
+                    $this->addFlash('error', 'Error al subir el banner a Cloudinary.');
                 }
             }
 

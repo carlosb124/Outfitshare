@@ -37,9 +37,9 @@
                     </div>
                 {% else %}
                     {% for prenda in outfit.prendas %}
-                        <div class="outfit-image-cell"
-                             @click="lightboxSrc = '{{ asset(prenda.imagen ? 'uploads/images/' ~ prenda.imagen : 'images/placeholder.png') }}'">
-                            <img src="{{ asset(prenda.imagen ? 'uploads/images/' ~ prenda.imagen : 'images/placeholder.png') }}"
+                        <div class="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 dark:bg-[#1a1a1a] cursor-pointer group/item"
+                             @click="lightboxSrc = '{{ prenda.imagenUrl ?: asset('images/placeholder.png') }}'">
+                            <img src="{{ prenda.imagenUrl ?: asset('images/placeholder.png') }}"
                                  alt="{{ prenda.nombre }}" loading="lazy">
                             <div class="outfit-image-hover">
                                 <div>
@@ -75,9 +75,9 @@
                 <h1 class="os-title os-title--md" style="margin-bottom:8px;">{{ outfit.titulo }}</h1>
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
                     <a href="{{ path('app_profile_show', {'id': outfit.user.id}) }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
-                        <div class="outfit-author-avatar">
-                            {% if outfit.user.profilePhoto %}
-                                <img src="{{ outfit.user.profilePhoto }}" alt="{{ outfit.user.name }}">
+                        <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200/50">
+                            {% if outfit.user.profilePhotoUrl %}
+                                <img src="{{ outfit.user.profilePhotoUrl }}" alt="{{ outfit.user.name }}">
                             {% else %}
                                 {{ outfit.user.name|first|upper }}
                             {% endif %}
@@ -152,9 +152,9 @@
                 <div style="max-height:240px;overflow-y:auto;padding-right:4px;">
                     {% for comment in outfit.comments %}
                         <div class="outfit-comment">
-                            <div class="outfit-comment-avatar">
-                                {% if comment.author.profilePhoto %}
-                                    <img src="{{ comment.author.profilePhoto }}" alt="{{ comment.author.name }}">
+                            <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200/50">
+                                {% if comment.author.profilePhotoUrl %}
+                                    <img src="{{ comment.author.profilePhotoUrl }}" alt="{{ comment.author.name }}">
                                 {% else %}
                                     {{ comment.author.name|first|upper }}
                                 {% endif %}

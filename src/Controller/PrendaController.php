@@ -27,7 +27,7 @@ class PrendaController extends AbstractController
     }
 
     #[Route('/new', name: 'app_prenda_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, \App\Service\CloudinaryService $cloudinaryService): Response
     {
         $prenda = new Prenda();
         $prenda->setUser($this->getUser());
@@ -39,18 +39,11 @@ class PrendaController extends AbstractController
             $imagenFile = $form->get('imagenFile')->getData();
 
             if ($imagenFile) {
-                $originalFilename = pathinfo($imagenFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imagenFile->guessExtension();
-
                 try {
-                    $imagenFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                    $prenda->setImagen($newFilename);
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Error al subir la imagen');
+                    $secureUrl = $cloudinaryService->uploadImage($imagenFile, 'outfitshare/prendas');
+                    $prenda->setImagen($secureUrl);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Error al subir la imagen a Cloudinary.');
                 }
             }
 
@@ -132,8 +125,7 @@ class PrendaController extends AbstractController
         $entityManager->remove($prenda);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Prenda eliminada.');
-
-        return $this->redirectToRoute('app_prenda_index');
+        $this->addFlash('success', 'Prenda eliminada correctamente.');
+        return $this->redirectToRoute('app_profile_show', ['id' => $this->getUser()->getId()]);
     }
 }

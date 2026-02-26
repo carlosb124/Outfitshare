@@ -372,6 +372,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->profilePhoto;
     }
 
+    public function getProfilePhotoUrl(): ?string
+    {
+        if (!$this->profilePhoto) {
+            return null;
+        }
+
+        if (str_starts_with($this->profilePhoto, 'http://') || str_starts_with($this->profilePhoto, 'https://')) {
+            return $this->profilePhoto;
+        }
+
+        return ltrim($this->profilePhoto, '/');
+    }
+
     public function setProfilePhoto(?string $profilePhoto): static
     {
         $this->profilePhoto = $profilePhoto;
@@ -381,6 +394,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getBannerPhoto(): ?string
     {
         return $this->bannerPhoto;
+    }
+
+    public function getBannerPhotoUrl(): ?string
+    {
+        if (!$this->bannerPhoto) {
+            return null;
+        }
+
+        if (str_starts_with($this->bannerPhoto, 'http://') || str_starts_with($this->bannerPhoto, 'https://')) {
+            return $this->bannerPhoto;
+        }
+
+        return ltrim($this->bannerPhoto, '/');
     }
 
     public function setBannerPhoto(?string $bannerPhoto): static

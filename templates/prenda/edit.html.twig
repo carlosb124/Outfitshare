@@ -21,13 +21,14 @@
             </div>
         </div>
 
-        {# Current Image Preview #}
-        {% if prenda.imagen %}
-            <div class="armario-form-preview">
-                <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" alt="{{ prenda.nombre }}">
+        <div class="prenda-form-col text-center">
+        {% if prenda.imagenUrl %}
+            <div class="prenda-image-preview">
+                <img src="{{ prenda.imagenUrl }}" alt="{{ prenda.nombre }}">
                 <p class="os-hint" style="margin-top:8px;">Imagen actual</p>
             </div>
         {% endif %}
+        </div>
 
         {{ form_start(form, {'attr': {'style': 'display:flex;flex-direction:column;gap:0;', 'enctype': 'multipart/form-data'}}) }}
             

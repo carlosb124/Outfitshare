@@ -29,7 +29,7 @@
                          data-outfit-editor-target="sidebarItem"
                          data-action="click->outfit-editor#toggleItem"
                          data-id="{{ choice.vars.value }}"
-                         data-image="{{ asset(prenda.imagen ? 'uploads/images/' ~ prenda.imagen : 'images/placeholder.png') }}"
+                         data-image="{{ prenda.imagenUrl ?: 'images/placeholder.png' }}"
                          data-name="{{ prenda.nombre|default('Item') }}">
                         
                         {# Hidden Checkbox from Symfony #}
@@ -37,8 +37,8 @@
                             {{ form_widget(choice, {'attr': {'data-outfit-editor-target': 'checkbox'}}) }}
                         </div>
 
-                        {% if prenda.imagen is defined and prenda.imagen %}
-                            <img src="{{ asset('uploads/images/' ~ prenda.imagen) }}" 
+                        {% if prenda.imagenUrl %}
+                            <img src="{{ prenda.imagenUrl }}" 
                                  class="w-full h-full object-cover" 
                                  alt="{{ prenda.nombre|default('Item') }}">
                         {% else %}

@@ -5,8 +5,8 @@
 {% block body %}
 <div class="os-page os-page--narrow" x-data="{ activeTab: 'outfits' }">
     <div class="profile-banner">
-        {% if user.bannerPhoto %}
-            <img src="{{ user.bannerPhoto }}" alt="Banner">
+        {% if user.bannerPhotoUrl %}
+            <img src="{{ user.bannerPhotoUrl }}" alt="Banner">
         {% else %}
             <div class="profile-banner-pattern"></div>
         {% endif %}
@@ -15,9 +15,9 @@
     <div class="profile-card">
         <div class="profile-header">
             <div class="profile-avatar-wrap">
-                <div class="profile-avatar">
-                    {% if user.profilePhoto %}
-                        <img src="{{ user.profilePhoto }}" alt="{{ user.name }}">
+                <div class="profile-header-avatar">
+                    {% if user.profilePhotoUrl %}
+                        <img src="{{ user.profilePhotoUrl }}" alt="{{ user.name }}">
                     {% else %}
                         <div class="profile-avatar-placeholder">{{ user.name|first|upper }}</div>
                     {% endif %}

@@ -129,9 +129,9 @@
                 {# User Dropdown #}
                 <div class="relative group ml-2">
                     <button class="flex items-center gap-2 focus:outline-none">
-                        <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-[#333333] border-2 border-white dark:border-[#1A1A1A] shadow-sm flex items-center justify-center text-dark-gray dark:text-[#F0F0F0] font-bold overflow-hidden">
-                            {% if app.user.profilePhoto %}
-                                <img src="{{ app.user.profilePhoto }}" class="w-full h-full object-cover">
+                        <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-white/[0.12] bg-gray-50 flex-shrink-0">
+                            {% if app.user.profilePhotoUrl %}
+                                <img src="{{ app.user.profilePhotoUrl }}" class="w-full h-full object-cover">
                             {% else %}
                                 {{ app.user.name|first|upper }}
                             {% endif %}
