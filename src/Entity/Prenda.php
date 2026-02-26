@@ -13,6 +13,11 @@ class Prenda
     #[ORM\Column]
     private ?int $id = null;
 
+    public function __toString(): string
+    {
+        return $this->nombre ?? 'Prenda #' . $this->id;
+    }
+
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 

@@ -55,6 +55,11 @@ class Outfit
         $this->savedOutfits = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->titulo ?? 'Outfit #' . $this->id;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -115,6 +115,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->followRequests = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->name ?? $this->email ?? 'User #' . $this->id;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

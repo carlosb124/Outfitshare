@@ -2,8 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Outfit;
+use App\Entity\Prenda;
 use App\Repository\UserRepository;
 use App\Repository\OutfitRepository;
+use App\Controller\Admin\UserCrudController;
+use App\Controller\Admin\OutfitCrudController;
+use App\Controller\Admin\PrendaCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -40,5 +46,11 @@ class AdminController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::section('Gestión');
+        yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
+        yield MenuItem::linkToCrud('Outfits', 'fa fa-tshirt', Outfit::class);
+        yield MenuItem::linkToCrud('Prendas', 'fa fa-shirt', Prenda::class);
+        yield MenuItem::section('Accesos');
+        yield MenuItem::linkToUrl('Volver a la web', 'fa fa-arrow-left', '/');
     }
 }
