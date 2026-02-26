@@ -82,13 +82,22 @@
                 <i class="bi bi-x-lg text-lg"></i>
             </button>
 
-            {# Desktop nav links #}
+            {# Desktop nav links — with icons + pill hover #}
             {% if app.user %}
-                <nav class="hidden md:flex items-center gap-6 font-bold text-sm text-gray-500">
-                    <a href="{{ path('app_feed') }}" class="hover:text-dark-gray transition-colors {{ app.request.attributes.get('_route') == 'app_feed' ? 'nav-link-active' : '' }}">Inicio</a>
-                    <a href="{{ path('app_outfit_index') }}" class="hover:text-dark-gray transition-colors {{ app.request.attributes.get('_route') == 'app_outfit_index' ? 'nav-link-active' : '' }}">Mis Looks</a>
-                    <a href="{{ path('app_prenda_index') }}" class="hover:text-dark-gray transition-colors {{ app.request.attributes.get('_route') == 'app_prenda_index' ? 'nav-link-active' : '' }}">Mi Armario</a>
-                    <a href="{{ path('app_randomizer_index') }}" class="hover:text-dark-gray transition-colors flex items-center gap-1 {{ app.request.attributes.get('_route') == 'app_randomizer_index' ? 'nav-link-active' : '' }}">
+                <nav class="hidden md:flex items-center gap-1 font-semibold text-sm text-gray-500">
+                    <a href="{{ path('app_feed') }}" class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-gray-100 hover:text-dark-gray transition-all {{ app.request.attributes.get('_route') == 'app_feed' ? 'nav-link-active' : '' }}">
+                        <i class="bi bi-house-door text-base"></i>
+                        Inicio
+                    </a>
+                    <a href="{{ path('app_outfit_index') }}" class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-gray-100 hover:text-dark-gray transition-all {{ app.request.attributes.get('_route') == 'app_outfit_index' ? 'nav-link-active' : '' }}">
+                        <i class="bi bi-grid text-base"></i>
+                        Mis Looks
+                    </a>
+                    <a href="{{ path('app_prenda_index') }}" class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-gray-100 hover:text-dark-gray transition-all {{ app.request.attributes.get('_route') == 'app_prenda_index' ? 'nav-link-active' : '' }}">
+                        <i class="bi bi-handbag text-base"></i>
+                        Mi Armario
+                    </a>
+                    <a href="{{ path('app_randomizer_index') }}" class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-gray-100 hover:text-dark-gray transition-all {{ app.request.attributes.get('_route') == 'app_randomizer_index' ? 'nav-link-active' : '' }}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--os-accent)" stroke="none">
                             <path d="M12 2L14.09 8.26L20.18 9.27L15.54 13.97L16.82 20.02L12 17.27L7.18 20.02L8.46 13.97L3.82 9.27L9.91 8.26Z"/>
                         </svg>

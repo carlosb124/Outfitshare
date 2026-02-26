@@ -1864,8 +1864,7 @@ a {
 
 /* ============================================
    MOBILE BOTTOM NAVIGATION BAR
-   Visible only on screens < md (768px).
-   Hidden via Tailwind `md:hidden` in the template.
+   Visible only on screens < 768px (mobile).
    ============================================ */
 .mobile-bottom-nav {
     position: fixed;
@@ -1882,6 +1881,13 @@ a {
     border-top: 1px solid rgba(0, 0, 0, 0.06);
     padding-bottom: env(safe-area-inset-bottom, 0px);
     height: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+/* HIDE on desktop (>=768px) */
+@media (min-width: 768px) {
+    .mobile-bottom-nav {
+        display: none !important;
+    }
 }
 
 [data-theme="dark"] .mobile-bottom-nav {
@@ -1927,9 +1933,34 @@ a {
     color: #fff;
 }
 
-/* Ensure main content doesn't hide behind the bottom nav on mobile */
+/* Ensure main content doesn't hide behind the bottom nav on mobile only */
 @media (max-width: 767px) {
     body {
         padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+/* ============================================
+   DESKTOP NAVBAR ENHANCEMENTS
+   Premium look for screens >= 768px
+   ============================================ */
+@media (min-width: 768px) {
+
+    /* Active nav link indicator */
+    .nav-link-active {
+        color: var(--os-text-primary, #0D0D0D) !important;
+        position: relative;
+    }
+
+    .nav-link-active::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 3px;
+        border-radius: 3px;
+        background: var(--os-accent, #C6F402);
     }
 }
