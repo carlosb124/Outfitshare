@@ -16,7 +16,7 @@ class NotificationService
 
     public function create(User $recipient, string $type, string $message, ?User $sender = null, ?Outfit $relatedOutfit = null): void
     {
-        // no notificar a los usuarios a si mismos
+        // No notificar al propio usuario
         if ($sender === $recipient) {
             return;
         }
@@ -58,7 +58,7 @@ class NotificationService
 
     public function notifyComment(User $commenter, Outfit $outfit, string $commentContent): void
     {
-        // Truncate comment for the notification message
+        // Recortar texto del comentario para la notificación
         $preview = mb_strlen($commentContent) > 30 ? mb_substr($commentContent, 0, 30) . '...' : $commentContent;
 
         $this->create(

@@ -2,13 +2,13 @@
 
 {% block title %}OutfitShare — Tu armario inteligente{% endblock %}
 
-{# Load landing-specific CSS #}
+{# CSS propio de la landing #}
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
 {% endblock %}
 
-{# Override default navbar #}
+{# Sin navbar estándar en la landing #}
 {% block navbar %}
     {% include 'components/_navbar_public.html.twig' %}
 {% endblock %}
@@ -41,7 +41,7 @@
                 </a>
             </div>
 
-            {# Photo Grid #}
+            {# Grid de fotos #}
             <div class="hero__grid">
                 <div class="hero__grid-item">
                     <img src="https://i.pinimg.com/originals/d0/f3/de/d0f3de714baa0bf50c016f15be08804b.jpg" alt="Look de moda" loading="lazy">

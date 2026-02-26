@@ -1,4 +1,4 @@
-{# Prenda Card — uses .os-card #}
+{# Tarjeta de prenda #}
 <div class="os-card" style="display:flex;flex-direction:column;height:100%;"
      x-data="{ showDelete: false }">
     <a href="{{ path('app_prenda_edit', {'id': prenda.id}) }}" class="armario-card-image">
@@ -32,7 +32,7 @@
         </button>
     </div>
 
-    {# Delete Confirmation Modal #}
+    {# Modal de confirmación de borrado #}
     <template x-if="showDelete">
         <div class="armario-modal-overlay" @click.self="showDelete = false">
             <div class="armario-modal-box">

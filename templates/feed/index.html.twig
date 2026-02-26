@@ -3,7 +3,7 @@
 {% block title %}OutfitShare - Descubre tu estilo{% endblock %}
 
 {% block body %}
-{# Pills Nav / Categories #}
+{# Filtros de categoría #}
 <div class="flex overflow-x-auto pb-6 gap-2 mb-8 no-scrollbar scroll-smooth">
     {% set currentCat = currentCategory|default('Para Ti') %}
     
@@ -16,7 +16,7 @@
     <a href="{{ path('app_feed', {'category': 'Verano 2026'}) }}" class="px-5 py-2.5 rounded-full font-bold whitespace-nowrap transition-all text-sm {{ currentCat == 'Verano 2026' ? 'bg-neon-lime text-black font-extrabold' : 'bg-white dark:bg-[#1A1A1A] text-gray-500 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-[#242424] border border-gray-200 dark:border-white/[0.12]' }}">Verano 2026</a>
 </div>
 
-{# Matching Profiles (Search Only) #}
+{# Perfiles encontrados (solo en búsqueda) #}
 {% if currentSearch and users is defined and users|length > 0 %}
     <div class="mb-8">
         <h2 class="text-xl font-bold text-dark-gray dark:text-white mb-4">Perfiles Encontrados</h2>
@@ -40,7 +40,7 @@
     </div>
 {% endif %}
 
-{# Masonry Feed #}
+{# Feed de outfits #}
 <div class="px-0 md:px-0">
     {% if outfits|length > 0 %}
         <div class="mb-4 text-center">
@@ -59,7 +59,7 @@
            EMPTY STATE — Redesigned per audit
            ══════════════════════════════════════════ #}
         <div class="flex flex-col items-center justify-center py-24 empty-state-enter" role="status" aria-label="No hay looks todavía">
-            {# Icon container with breathing animation #}
+            {# Icono animado #}
             <div class="w-20 h-20 bg-gray-100 dark:bg-[#1A1A1A] rounded-full flex items-center justify-center mb-6 empty-state-pulse">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 dark:text-white/40">
                     {# Hanger icon #}
@@ -86,7 +86,7 @@
             </a>
         </div>
 
-        {# Empty state animations #}
+        {# Animaciones del estado vacío #}
         <style>
             @keyframes emptyStateFadeIn {
                 from { opacity: 0; transform: translateY(16px); }

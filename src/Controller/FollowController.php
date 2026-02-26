@@ -33,7 +33,7 @@ class FollowController extends AbstractController
         $isFollowing = $currentUser->getFollowing()->contains($targetUser);
 
         if ($isFollowing) {
-            // Unfollow — always instant
+            // Dejar de seguir (siempre inmediato)
             $currentUser->removeFollowing($targetUser);
             $entityManager->flush();
 
@@ -45,14 +45,14 @@ class FollowController extends AbstractController
             ]);
         }
 
-        // Check if target profile is private
+        // Perfil privado → solicitud de seguimiento
         if (!$targetUser->isPublic()) {
-            // Check for existing request
+            // Comprobar si ya existe una solicitud
             $existingRequest = $followRequestRepository->findBetweenUsers($currentUser, $targetUser);
 
             if ($existingRequest) {
                 if ($existingRequest->isPending()) {
-                    // Cancel the pending request
+                    // Cancelar solicitud pendiente
                     $entityManager->remove($existingRequest);
                     $entityManager->flush();
 
@@ -63,19 +63,19 @@ class FollowController extends AbstractController
                         'followersCount' => $targetUser->getFollowers()->count(),
                     ]);
                 }
-                // If previously rejected, create a new request
+                // Si fue rechazada antes, crear nueva solicitud
                 $entityManager->remove($existingRequest);
                 $entityManager->flush();
             }
 
-            // Create a follow request
+            // Crear solicitud de seguimiento
             $followRequest = new FollowRequest();
             $followRequest->setRequester($currentUser);
             $followRequest->setTarget($targetUser);
             $entityManager->persist($followRequest);
             $entityManager->flush();
 
-            // Notify target user
+            // Notificar al usuario destino
             $notificationService->notifyFollowRequest($currentUser, $targetUser);
 
             return $this->json([
@@ -86,7 +86,7 @@ class FollowController extends AbstractController
             ]);
         }
 
-        // Public profile — instant follow
+        // Perfil público → seguir directamente
         $currentUser->addFollowing($targetUser);
         $entityManager->flush();
 
@@ -109,7 +109,7 @@ class FollowController extends AbstractController
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
-        // Only the target user can accept
+        // Solo el destinatario puede aceptar
         if ($followRequest->getTarget() !== $currentUser) {
             return $this->json(['error' => 'Unauthorized'], 403);
         }
@@ -118,14 +118,14 @@ class FollowController extends AbstractController
             return $this->json(['error' => 'Request already processed'], 400);
         }
 
-        // Accept: add the follow relationship
+        // Aceptar: crear la relación de seguimiento
         $requester = $followRequest->getRequester();
         $requester->addFollowing($currentUser);
         $followRequest->setStatus(FollowRequest::STATUS_ACCEPTED);
 
         $entityManager->flush();
 
-        // Notify requester that their request was accepted
+        // Notificar que la solicitud fue aceptada
         $notificationService->notifyFollowAccepted($currentUser, $requester);
 
         return $this->json([
@@ -142,7 +142,7 @@ class FollowController extends AbstractController
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
-        // Only the target user can reject
+        // Solo el destinatario puede rechazar
         if ($followRequest->getTarget() !== $currentUser) {
             return $this->json(['error' => 'Unauthorized'], 403);
         }

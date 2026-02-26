@@ -37,7 +37,7 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle Profile Photo
+            // Subir foto de perfil si se envió
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $profileFile */
             $profileFile = $form->get('profilePhoto')->getData();
             if ($profileFile) {
@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
                 }
             }
 
-            // Handle Banner Photo
+            // Subir banner si se envió
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $bannerFile */
             $bannerFile = $form->get('bannerPhoto')->getData();
             if ($bannerFile) {
@@ -79,12 +79,12 @@ class ProfileController extends AbstractController
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
-        // If viewing own profile via this route, redirect to main profile route (canonical)
+        // Si es mi propio perfil, redirigir a la ruta canónica
         if ($currentUser === $user) {
             return $this->redirectToRoute('app_profile_index');
         }
 
-        // Check if there's a pending follow request from current user to this user
+        // Comprobar si ya hay solicitud de seguimiento pendiente
         $followRequest = $followRequestRepository->findBetweenUsers($currentUser, $user);
         $isPending = $followRequest && $followRequest->isPending();
 

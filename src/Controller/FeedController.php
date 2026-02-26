@@ -15,9 +15,9 @@ class FeedController extends AbstractController
     public function index(OutfitRepository $outfitRepository, \App\Repository\UserRepository $userRepository, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $search = $request->query->get('q');
-        $category = $request->query->get('category'); // Para Ti, Tendencias, etc.
+        $category = $request->query->get('category'); // filtro de categoría
 
-        // Default to "Para Ti" (Newest) if nothing set
+        // Por defecto mostrar "Para Ti" (más recientes)
         if (!$category && !$search) {
             $category = 'Para Ti';
         }
@@ -26,7 +26,7 @@ class FeedController extends AbstractController
         
         $users = [];
         if ($search) {
-            // Search profiles excluding current user
+            // Buscar perfiles (excluir al propio usuario)
             $users = $userRepository->searchProfiles($search, $this->getUser() ? $this->getUser()->getId() : null);
         }
 

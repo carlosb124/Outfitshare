@@ -25,21 +25,21 @@ class LikeController extends AbstractController
             return $this->json(['error' => 'Unauthorized'], 401);
         }
 
-        // Buscar si ya existe el like
+        // Comprobar si el usuario ya dio like
         $like = $likeRepository->findOneByUserAndOutfit($user, $outfit);
 
         if ($like) {
-            // Si existe, lo quitamos
-            $outfit->removeLike($like); // Updates memory
+            // Ya existe → quitar like
+            $outfit->removeLike($like); // Actualizar colección en memoria
             $entityManager->remove($like);
             $entityManager->flush();
             $isLiked = false;
         } else {
-            // Si no existe, lo creamos
+            // No existe → dar like
             $like = new Like();
             $like->setUser($user);
             $like->setOutfit($outfit);
-            $outfit->addLike($like); // Updates memory
+            $outfit->addLike($like); // Actualizar colección en memoria
             $entityManager->persist($like);
             $entityManager->flush();
             $isLiked = true;

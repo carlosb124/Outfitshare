@@ -30,7 +30,7 @@ class CommentController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            // Send Notification
+            // Enviar notificación
             $notificationService->notifyComment($this->getUser(), $outfit, $content);
 
             $this->addFlash('success', 'Comment added!');

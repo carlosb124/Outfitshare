@@ -22,7 +22,7 @@ class Notification
     private ?User $sender = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $type = null; // 'like', 'save', 'comment', 'follow'
+    private ?string $type = null; // tipo: like, save, comment, follow
 
     #[ORM\Column(length: 255)]
     private ?string $message = null;

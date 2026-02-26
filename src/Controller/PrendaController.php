@@ -112,8 +112,8 @@ class PrendaController extends AbstractController
             throw $this->createAccessDeniedException('No puedes eliminar esta prenda.');
         }
 
-        // En una app real, verificaríamos el token CSRF aquí.
-        // if ($this->isCsrfTokenValid('delete'.$prenda->getId(), $request->request->get('_token'))) { ... }
+        // TODO: verificar token CSRF
+        
 
         $entityManager->remove($prenda);
         $entityManager->flush();

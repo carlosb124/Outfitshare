@@ -31,12 +31,12 @@ class OutfitController extends AbstractController
         $outfit->setUser($this->getUser());
         $outfit->setFechaPublicacion(new \DateTime());
 
-        // Manejar pre-selección desde Randomizer
+        // Preselección desde el randomizer (si viene con prendas elegidas)
         if ($ids = $request->query->get('pre_selected')) {
             $prendaIds = explode(',', $ids);
-            // Necesitamos el repositorio para buscar las entidades
-            // Esto es un parche rápido si no inyectamos repositorio en método, 
-            // pero como tenemos EntityManager disponible:
+            // Buscar las prendas por ID
+            
+            
             foreach ($prendaIds as $id) {
                 $prenda = $entityManager->getReference(\App\Entity\Prenda::class, $id);
                 if ($prenda) {
@@ -66,10 +66,10 @@ class OutfitController extends AbstractController
     #[Route('/{id}', name: 'app_outfit_show', methods: ['GET'])]
     public function show(Outfit $outfit): Response
     {
-        // Verificar que el usuario sea el dueño (o implementar voter más adelante para visibilidad pública)
+        // Verificar permisos de visualización
         if ($outfit->getUser() !== $this->getUser()) {
-            // Si implementamos parte social, esto cambiará. Por ahora, protección simple.
-            // throw $this->createAccessDeniedException('No puedes ver este outfit.');
+            
+            
         }
 
         return $this->render('outfit/show.html.twig', [
@@ -80,7 +80,7 @@ class OutfitController extends AbstractController
     #[Route('/{id}/edit', name: 'app_outfit_edit', methods: ['GET', 'POST'])]
     public function edit(Outfit $outfit): Response
     {
-        // Legacy edit template was removed — redirect to outfit view
+        // Redirigir a vista del outfit (no hay pantalla de edición)
         return $this->redirectToRoute('app_outfit_show', ['id' => $outfit->getId()]);
     }
 
@@ -90,7 +90,7 @@ class OutfitController extends AbstractController
         $user = $this->getUser();
         if ($outfit->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
             if ($user instanceof \App\Entity\User && $outfit->getUser()->getId() === $user->getId()) {
-                // Es el dueño
+                // Es el dueño del outfit
             } else {
                 throw $this->createAccessDeniedException();
             }

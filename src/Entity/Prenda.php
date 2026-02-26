@@ -94,12 +94,12 @@ class Prenda
             return null;
         }
 
-        // Check if it's already a full HTTP URL (Cloudinary)
+        // Si ya es URL completa (Cloudinary), devolverla tal cual
         if (str_starts_with($this->imagen, 'http://') || str_starts_with($this->imagen, 'https://')) {
             return $this->imagen;
         }
 
-        // Fallback for legacy local images
+        // Imágenes locales antiguas
         return 'uploads/images/' . $this->imagen;
     }
 

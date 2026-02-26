@@ -86,7 +86,7 @@ class Outfit
     public function removeLike(Like $like): static
     {
         if ($this->likes->removeElement($like)) {
-            // set the owning side to null (unless already changed)
+            // Limpiar referencia inversa
             if ($like->getOutfit() === $this) {
                 $like->setOutfit(null);
             }
@@ -206,7 +206,7 @@ class Outfit
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
+            // Limpiar referencia inversa
             if ($comment->getOutfit() === $this) {
                 $comment->setOutfit(null);
             }

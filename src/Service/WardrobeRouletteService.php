@@ -17,7 +17,7 @@ class WardrobeRouletteService
 
     public function spin(User $user, ?SeasonEnum $season = null): Outfit
     {
-        // 1. Fetch available items
+        // Obtener prendas disponibles
         $criteria = ['user' => $user];
         if ($season && $season !== SeasonEnum::ALL_SEASON) {
             $criteria['season'] = $season;
@@ -26,7 +26,7 @@ class WardrobeRouletteService
         $allClothes = $this->prendaRepository->findBy($criteria);
 
         if (empty($allClothes)) {
-            // Fallback: try without season if strict season returned nothing
+            // Si no hay resultados por temporada, buscar sin filtro
             if ($season) {
                 $allClothes = $this->prendaRepository->findBy(['user' => $user]);
             }
@@ -36,8 +36,8 @@ class WardrobeRouletteService
             }
         }
 
-        // 2. Filter by categories (naive approach for now)
-        // Adjust these category names based on actual database values
+        // Agrupar por categoría
+        
         $tops = $this->filterByCategory($allClothes, ['top', 'shirt', 't-shirt', 'blouse', 'sweater']);
         $bottoms = $this->filterByCategory($allClothes, ['pants', 'jeans', 'skirt', 'shorts']);
         $shoes = $this->filterByCategory($allClothes, ['shoes', 'sneakers', 'boots', 'sandals']);
@@ -66,7 +66,7 @@ class WardrobeRouletteService
             }
         }
 
-        // Always add shoes if available
+        // Añadir calzado si hay
         if (!empty($shoes)) {
             $selectedShoes = $shoes[array_rand($shoes)];
             $draftOutfit->addPrenda($selectedShoes);
@@ -78,7 +78,7 @@ class WardrobeRouletteService
     private function filterByCategory(array $items, array $keywords): array
     {
         return array_filter($items, function ($item) use ($keywords) {
-            // Assuming getCategoria() returns a string. 
+            // Categoría como string 
             // Better to use an Enum for Category in the future.
             $category = strtolower($item->getCategoria() ?? '');
             return in_array($category, $keywords) || $this->matchesKeyword($category, $keywords);

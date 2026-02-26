@@ -51,7 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isBanned = false;
 
-    // --- New Fields ---
+    // Campos adicionales
 
     #[ORM\Column(length: 255, unique: true, nullable: true)]
     private ?string $googleId = null;
@@ -241,8 +241,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getImage(): ?string
     {
-        // Placeholder por si queremos añadir avatar real más tarde.
-        // Por ahora usamos UI Avatars en el frontend.
+        // Placeholder — usamos UI Avatars en el frontend
+        
         return null;
     }
 
@@ -267,7 +267,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeLike(Like $like): static
     {
         if ($this->likes->removeElement($like)) {
-            // set the owning side to null (unless already changed)
+            // Limpiar referencia inversa
             if ($like->getUser() === $this) {
                 $like->setUser(null);
             }
@@ -297,7 +297,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeSavedOutfit(SavedOutfit $savedOutfit): static
     {
         if ($this->savedOutfits->removeElement($savedOutfit)) {
-            // set the owning side to null (unless already changed)
+            // Limpiar referencia inversa
             if ($savedOutfit->getUser() === $this) {
                 $savedOutfit->setUser(null);
             }
@@ -536,7 +536,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeNotification(Notification $notification): static
     {
         if ($this->notifications->removeElement($notification)) {
-            // set the owning side to null (unless already changed)
+            // Limpiar referencia inversa
             if ($notification->getRecipient() === $this) {
                 $notification->setRecipient(null);
             }

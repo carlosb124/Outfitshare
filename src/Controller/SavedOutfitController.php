@@ -30,7 +30,7 @@ class SavedOutfitController extends AbstractController
         $isSaved = false;
 
         if ($savedOutfit) {
-            $user->removeSavedOutfit($savedOutfit); // Update memory
+            $user->removeSavedOutfit($savedOutfit); // Actualizar colección en memoria
             $entityManager->remove($savedOutfit);
             $isSaved = false;
         } else {
@@ -38,11 +38,11 @@ class SavedOutfitController extends AbstractController
             $savedOutfit->setUser($user);
             $savedOutfit->setOutfit($outfit);
             $savedOutfit->setSavedAt(new \DateTimeImmutable());
-            $user->addSavedOutfit($savedOutfit); // Update memory
+            $user->addSavedOutfit($savedOutfit); // Actualizar colección en memoria
             $entityManager->persist($savedOutfit);
             $isSaved = true;
 
-            // Send Notification
+            // Enviar notificación
             $notificationService->notifySave($user, $outfit);
         }
 

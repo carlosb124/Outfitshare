@@ -49,7 +49,7 @@ class ApiPrendaController extends AbstractController
     #[Route('/{id}', name: 'api_prenda_show', methods: ['GET'])]
     public function show(Prenda $prenda): JsonResponse
     {
-        // Verificar que la prenda pertenece al usuario
+        // Verificar permisos
         if ($prenda->getUser() !== $this->getUser()) {
             return $this->json([
                 'success' => false,
@@ -81,7 +81,7 @@ class ApiPrendaController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Obtener datos del request (soporta JSON y form-data)
+        // Obtener datos (JSON o form-data)
         $contentType = $request->headers->get('Content-Type');
 
         if (str_contains($contentType, 'application/json')) {
@@ -90,7 +90,7 @@ class ApiPrendaController extends AbstractController
             $data = $request->request->all();
         }
 
-        // Validar campos requeridos
+        // Validar campos obligatorios
         if (empty($data['nombre']) || empty($data['categoria'])) {
             return $this->json([
                 'success' => false,
@@ -98,14 +98,14 @@ class ApiPrendaController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // Crear la prenda
+        // Crear prenda
         $prenda = new Prenda();
         $prenda->setNombre($data['nombre']);
         $prenda->setCategoria($data['categoria']);
         $prenda->setMarca($data['marca'] ?? null);
         $prenda->setUser($user);
 
-        // Manejar imagen si se envía
+        // Subir imagen si se envió
         $imagenFile = $request->files->get('imagen');
         if ($imagenFile) {
             $originalFilename = pathinfo($imagenFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -188,7 +188,7 @@ class ApiPrendaController extends AbstractController
             ], Response::HTTP_FORBIDDEN);
         }
 
-        // Eliminar imagen si existe
+        // Borrar imagen asociada
         if ($prenda->getImagen()) {
             $imagePath = $this->getParameter('images_directory') . '/' . $prenda->getImagen();
             if (file_exists($imagePath)) {

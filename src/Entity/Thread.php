@@ -112,7 +112,7 @@ class Thread
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
+            // Limpiar referencia inversa
             if ($comment->getThread() === $this) {
                 $comment->setThread(null);
             }

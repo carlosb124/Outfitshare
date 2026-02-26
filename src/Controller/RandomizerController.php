@@ -18,12 +18,12 @@ class RandomizerController extends AbstractController
     {
         $user = $this->getUser();
 
-        // Obtener prendas del usuario
+        // Obtener las prendas del usuario actual
         $prendas = $prendaRepository->findBy(['user' => $user]);
 
-        // Agrupar por categorías (simplificado - asumiendo nomenclatura algo estándar o búsqueda laxa)
-        // Categorías típicas: "Parte Superior", "Parte Inferior", "Calzado", "Accesorios"
-        // Si no hay categorías estandarizadas, intentamos adivinar o simplemente cogemos 3 categorías distintas al azar.
+        
+        
+        
 
         $tops = [];
         $bottoms = [];
@@ -46,7 +46,7 @@ class RandomizerController extends AbstractController
             'shoes' => !empty($shoes) ? $shoes[array_rand($shoes)] : null,
         ];
 
-        // Verificar si tenemos al menos 2 piezas para proponer algo decente
+        // Mínimo 2 prendas para proponer un outfit
         $hasEnough = ($randomOutfit['top'] && $randomOutfit['bottom']);
 
         return $this->render('randomizer/index.html.twig', [

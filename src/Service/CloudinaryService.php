@@ -12,7 +12,7 @@ class CloudinaryService
 
     public function __construct(string $cloudinaryUrl)
     {
-        // Require the URL to be present (it should be configured in .env / Railway)
+        // URL configurada en .env o Railway
         $this->cloudinary = new Cloudinary(Configuration::instance($cloudinaryUrl));
     }
 
