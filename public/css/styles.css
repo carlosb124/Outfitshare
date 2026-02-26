@@ -551,13 +551,6 @@ a {
     z-index: 1000;
 }
 
-.nav-link-active {
-    color: var(--os-text-primary) !important;
-    text-decoration: underline;
-    text-decoration-color: var(--os-accent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
-}
 
 .mobile-nav-link {
     display: flex;
