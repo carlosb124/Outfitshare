@@ -22,6 +22,9 @@ class Outfit
     #[ORM\OneToMany(mappedBy: 'outfit', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
+    #[ORM\OneToMany(mappedBy: 'outfit', targetEntity: SavedOutfit::class, orphanRemoval: true)]
+    private Collection $savedOutfits;
+
     #[ORM\Column(length: 255)]
     private ?string $titulo = null;
 
@@ -49,6 +52,7 @@ class Outfit
         $this->prendas = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->savedOutfits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,6 +207,33 @@ class Outfit
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SavedOutfit>
+     */
+    public function getSavedOutfits(): Collection
+    {
+        return $this->savedOutfits;
+    }
+
+    public function addSavedOutfit(SavedOutfit $savedOutfit): static
+    {
+        if (!$this->savedOutfits->contains($savedOutfit)) {
+            $this->savedOutfits->add($savedOutfit);
+            $savedOutfit->setOutfit($this);
+        }
+        return $this;
+    }
+
+    public function removeSavedOutfit(SavedOutfit $savedOutfit): static
+    {
+        if ($this->savedOutfits->removeElement($savedOutfit)) {
+            if ($savedOutfit->getOutfit() === $this) {
+                $savedOutfit->setOutfit(null);
+            }
+        }
         return $this;
     }
 }

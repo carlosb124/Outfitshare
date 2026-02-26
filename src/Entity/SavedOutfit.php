@@ -17,7 +17,7 @@ class SavedOutfit
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'savedOutfits')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Outfit $outfit = null;
 
