@@ -1,7 +1,7 @@
 {# Prenda Card — uses .os-card #}
 <div class="os-card" style="display:flex;flex-direction:column;height:100%;"
      x-data="{ showDelete: false }">
-    <a href="{{ path('app_prenda_show', {'id': prenda.id})|default('#') }}" class="armario-card-image">
+    <a href="{{ path('app_prenda_edit', {'id': prenda.id}) }}" class="armario-card-image">
         {% if prenda.imagenUrl %}
             <img src="{{ prenda.imagenUrl }}" alt="{{ prenda.nombre }}" loading="lazy" class="w-full h-full object-cover">
         {% else %}

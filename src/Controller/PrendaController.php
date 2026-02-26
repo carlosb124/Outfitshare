@@ -72,7 +72,7 @@ class PrendaController extends AbstractController
         return $this->render('prenda/fetch.html.twig');
     }
     #[Route('/{id}/edit', name: 'app_prenda_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Prenda $prenda, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function edit(Request $request, Prenda $prenda, EntityManagerInterface $entityManager, \App\Service\CloudinaryService $cloudinaryService): Response
     {
         if ($prenda->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('No puedes editar esta prenda.');
@@ -85,18 +85,11 @@ class PrendaController extends AbstractController
             $imagenFile = $form->get('imagenFile')->getData();
 
             if ($imagenFile) {
-                $originalFilename = pathinfo($imagenFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imagenFile->guessExtension();
-
                 try {
-                    $imagenFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                    $prenda->setImagen($newFilename);
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Error al subir la imagen');
+                    $secureUrl = $cloudinaryService->uploadImage($imagenFile, 'outfitshare/prendas');
+                    $prenda->setImagen($secureUrl);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Error al subir la imagen a Cloudinary: ' . $e->getMessage());
                 }
             }
 
