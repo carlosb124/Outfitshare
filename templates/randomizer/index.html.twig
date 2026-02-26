@@ -23,7 +23,7 @@
                         <div class="os-card os-card--interactive estilista-slot-card">
                             <div class="estilista-slot-label os-label">Arriba</div>
                             <div class="estilista-slot-image">
-                                <img src="{{ asset('uploads/images/' ~ outfit.top.imagen) }}" alt="{{ outfit.top.nombre }}">
+                                <img src="{{ outfit.top.imagenUrl ?: asset('images/placeholder.png') }}" alt="{{ outfit.top.nombre }}">
                             </div>
                             <div class="estilista-slot-name">{{ outfit.top.nombre }}</div>
                         </div>
@@ -49,7 +49,7 @@
                         <div class="os-card os-card--interactive estilista-slot-card">
                             <div class="estilista-slot-label os-label">Abajo</div>
                             <div class="estilista-slot-image">
-                                <img src="{{ asset('uploads/images/' ~ outfit.bottom.imagen) }}" alt="{{ outfit.bottom.nombre }}">
+                                <img src="{{ outfit.bottom.imagenUrl ?: asset('images/placeholder.png') }}" alt="{{ outfit.bottom.nombre }}">
                             </div>
                             <div class="estilista-slot-name">{{ outfit.bottom.nombre }}</div>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="os-card os-card--interactive estilista-slot-card">
                             <div class="estilista-slot-label os-label">Zapatos</div>
                             <div class="estilista-slot-image">
-                                <img src="{{ asset('uploads/images/' ~ outfit.shoes.imagen) }}" alt="{{ outfit.shoes.nombre }}">
+                                <img src="{{ outfit.shoes.imagenUrl ?: asset('images/placeholder.png') }}" alt="{{ outfit.shoes.nombre }}">
                             </div>
                             <div class="estilista-slot-name">{{ outfit.shoes.nombre }}</div>
                         </div>

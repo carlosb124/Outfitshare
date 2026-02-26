@@ -93,7 +93,7 @@
 
                 {% if notification.relatedOutfit and notification.relatedOutfit.prendas|first %}
                      <div class="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
-                        <img src="{{ asset('uploads/images/' ~ notification.relatedOutfit.prendas|first.imagen) }}" class="w-full h-full object-cover">
+                        <img src="{{ notification.relatedOutfit.prendas|first.imagenUrl ?: asset('images/placeholder.png') }}" class="w-full h-full object-cover">
                      </div>
                 {% endif %}
             </div>

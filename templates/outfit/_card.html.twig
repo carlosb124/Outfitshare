@@ -5,16 +5,15 @@
             <div class="outfit-card-collage-grid">
                 {% for prenda in outfit.prendas|slice(0, 4) %}
                     <div class="outfit-card-collage-item">
-                        <div class="w-20 h-20 rounded-xl overflow-hidden bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100/50 dark:border-white/[0.05] relative flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-                            {% if prenda.imagenUrl %}
-                                <img src="{{ prenda.imagenUrl }}" alt="{{ prenda.nombre }}" loading="lazy"
-                                     class="w-full h-full object-cover">
-                            {% else %}
-                                <div class="w-full h-full flex items-center justify-center text-gray-300/50 dark:text-gray-600/50">
-                                    <i class="ri-t-shirt-line text-xl"></i>
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% if prenda.imagenUrl %}
+                            <img src="{{ prenda.imagenUrl }}" alt="{{ prenda.nombre }}" loading="lazy">
+                        {% else %}
+                            <div class="outfit-card-collage-empty">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 3h-8l-2 4h12z"/>
+                                </svg>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
