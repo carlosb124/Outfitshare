@@ -30,7 +30,7 @@
                         <span class="os-label" style="display:block;margin-bottom:8px;font-size:13px;color:var(--os-text-primary);">Foto de perfil</span>
                         <div class="settings-avatar-row">
                             <div class="settings-avatar" @click="$refs.profileInput.click()">
-                                <template x-if="photoPreview"><img :src="photoPreview" alt="Foto"></template>
+                                <template x-if="photoPreview"><img :src="photoPreview" alt="Foto" class="w-full h-full object-cover"></template>
                                 <template x-if="!photoPreview">
                                     <div class="settings-avatar-placeholder">
                                         <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -69,7 +69,7 @@
                     <div x-data="{ bannerPreview: '{{ app.user.bannerPhotoUrl|default(null) }}' }">
                         <span class="os-label" style="display:block;margin-bottom:8px;font-size:13px;color:var(--os-text-primary);">Foto de portada</span>
                         <div class="settings-banner-zone" @click="$refs.bannerInput.click()">
-                            <template x-if="bannerPreview"><img :src="bannerPreview" alt="Portada"></template>
+                            <template x-if="bannerPreview"><img :src="bannerPreview" alt="Portada" class="w-full h-full object-cover"></template>
                             <div class="settings-banner-zone-overlay">
                                 <span class="settings-banner-zone-text">
                                     <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

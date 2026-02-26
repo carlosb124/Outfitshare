@@ -77,7 +77,7 @@
                     <a href="{{ path('app_profile_show', {'id': outfit.user.id}) }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
                         <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200/50">
                             {% if outfit.user.profilePhotoUrl %}
-                                <img src="{{ outfit.user.profilePhotoUrl }}" alt="{{ outfit.user.name }}">
+                                <img src="{{ outfit.user.profilePhotoUrl }}" alt="{{ outfit.user.name }}" class="w-full h-full object-cover">
                             {% else %}
                                 {{ outfit.user.name|first|upper }}
                             {% endif %}
@@ -154,7 +154,7 @@
                         <div class="outfit-comment">
                             <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200/50">
                                 {% if comment.author.profilePhotoUrl %}
-                                    <img src="{{ comment.author.profilePhotoUrl }}" alt="{{ comment.author.name }}">
+                                    <img src="{{ comment.author.profilePhotoUrl }}" alt="{{ comment.author.name }}" class="w-full h-full object-cover">
                                 {% else %}
                                     {{ comment.author.name|first|upper }}
                                 {% endif %}

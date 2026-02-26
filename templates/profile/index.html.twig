@@ -6,7 +6,7 @@
 <div class="os-page os-page--narrow" x-data="{ activeTab: 'outfits' }">
     <div class="profile-banner">
         {% if user.bannerPhotoUrl %}
-            <img src="{{ user.bannerPhotoUrl }}" alt="Banner">
+            <img src="{{ user.bannerPhotoUrl }}" alt="Banner" class="w-full h-full object-cover">
         {% else %}
             <div class="profile-banner-pattern"></div>
         {% endif %}
@@ -17,7 +17,7 @@
             <div class="profile-avatar-wrap">
                 <div class="profile-header-avatar">
                     {% if user.profilePhotoUrl %}
-                        <img src="{{ user.profilePhotoUrl }}" alt="{{ user.name }}">
+                        <img src="{{ user.profilePhotoUrl }}" alt="{{ user.name }}" class="w-full h-full object-cover">
                     {% else %}
                         <div class="profile-avatar-placeholder">{{ user.name|first|upper }}</div>
                     {% endif %}
