@@ -2,6 +2,9 @@
 # Install JS vendor assets (gitignored)
 php bin/console importmap:install
 
+# Install bundle assets (EasyAdmin, etc.)
+php bin/console assets:install public --no-interaction
+
 # Build assets
 php bin/console tailwind:build --minify
 php bin/console asset-map:compile
