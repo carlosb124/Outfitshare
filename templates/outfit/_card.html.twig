@@ -5,7 +5,7 @@
             <div class="outfit-card-collage-grid">
                 {% for prenda in outfit.prendas|slice(0, 4) %}
                     <div class="outfit-card-collage-item">
-                        <div class="w-12 h-12 rounded-xl overflow-hidden bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100/50 dark:border-white/[0.05] relative flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+                        <div class="w-20 h-20 rounded-xl overflow-hidden bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100/50 dark:border-white/[0.05] relative flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
                             {% if prenda.imagenUrl %}
                                 <img src="{{ prenda.imagenUrl }}" alt="{{ prenda.nombre }}" loading="lazy"
                                      class="w-full h-full object-cover">
