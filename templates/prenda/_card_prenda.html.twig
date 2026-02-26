@@ -1,6 +1,18 @@
 {# Prenda Card — uses .os-card #}
 <div class="os-card" style="display:flex;flex-direction:column;height:100%;"
      x-data="{ showDelete: false }">
+    <a href="{{ path('app_prenda_show', {'id': prenda.id})|default('#') }}" class="armario-card-image">
+        {% if prenda.imagenUrl %}
+            <img src="{{ prenda.imagenUrl }}" alt="{{ prenda.nombre }}" loading="lazy" class="w-full h-full object-cover">
+        {% else %}
+            <div class="armario-card-no-img">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span>Sin imagen</span>
+            </div>
         {% endif %}
     </a>
 
