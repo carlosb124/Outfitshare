@@ -24,10 +24,7 @@ class CloudinaryService
         $result = $this->cloudinary->uploadApi()->upload(
             $file->getPathname(),
         [
-            'folder' => $folder,
-            // Cloudinary can automatically optimize images based on content
-            'format' => 'auto',
-            'quality' => 'auto'
+            'folder' => $folder
         ]
         );
 
