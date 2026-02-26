@@ -1942,25 +1942,12 @@ a {
 
 /* ============================================
    DESKTOP NAVBAR ENHANCEMENTS
-   Premium look for screens >= 768px
    ============================================ */
 @media (min-width: 768px) {
-
-    /* Active nav link indicator */
     .nav-link-active {
         color: var(--os-text-primary, #0D0D0D) !important;
-        position: relative;
-    }
-
-    .nav-link-active::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 20px;
-        height: 3px;
-        border-radius: 3px;
-        background: var(--os-accent, #C6F402);
+        border-bottom: 3px solid var(--os-accent, #C6F402);
+        border-radius: 0 !important;
+        padding-bottom: 6px;
     }
 }
