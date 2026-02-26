@@ -6,32 +6,39 @@
             {% set count = outfit.prendas|length %}
             
             {% if count == 1 %}
-                 <img src="{{ asset(visiblePrendas[0].imagen ? 'uploads/images/' ~ visiblePrendas[0].imagen : 'images/placeholder.png') }}" class="w-full h-full object-cover" alt="Outfit">
+                 <img src="{{ visiblePrendas[0].imagenUrl ?: asset('images/placeholder.png') }}" class="w-full h-full object-cover" alt="Outfit">
             {% elseif count == 2 %}
                  {% for p in visiblePrendas %}
                      <div class="w-1/2 h-full">
-                         <img src="{{ asset(p.imagen ? 'uploads/images/' ~ p.imagen : 'images/placeholder.png') }}" class="w-full h-full object-cover" alt="Prenda">
+                         <img src="{{ p.imagenUrl ?: asset('images/placeholder.png') }}" class="w-full h-full object-cover" alt="Prenda">
                      </div>
                  {% endfor %}
-            {% else %}
+            {% elseif count >= 3 %}
                  {# 1 Big Left, 2 Small Right #}
                  <div class="w-2/3 h-full">
-                     <img src="{{ asset(visiblePrendas[0].imagen ? 'uploads/images/' ~ visiblePrendas[0].imagen : 'images/placeholder.png') }}" class="w-full h-full object-cover" alt="Main Item">
+                     <img src="{{ visiblePrendas[0].imagenUrl ?: asset('images/placeholder.png') }}" class="w-full h-full object-cover" alt="Main Item">
                  </div>
                  <div class="w-1/3 h-full flex flex-col gap-0.5">
                      <div class="h-1/2">
-                         <img src="{{ asset(visiblePrendas[1].imagen ? 'uploads/images/' ~ visiblePrendas[1].imagen : 'images/placeholder.png') }}" class="w-full h-full object-cover" alt="Item 2">
+                         <img src="{{ visiblePrendas[1].imagenUrl ?: asset('images/placeholder.png') }}" class="w-full h-full object-cover" alt="Item 2">
                      </div>
                      <div class="h-1/2 relative">
-                         {% if count > 2 %}
-                             {% if count > 3 %}
-                                 <div class="absolute inset-0 bg-black/50 text-white flex items-center justify-center text-xs font-bold z-10">
-                                     +{{ count - 3 }}
-                                 </div>
-                             {% endif %}
-                             <img src="{{ asset(visiblePrendas[2].imagen ? 'uploads/images/' ~ visiblePrendas[2].imagen : 'images/placeholder.png') }}" class="w-full h-full object-cover" alt="Item 3">
+                         {% if count > 3 %}
+                             <div class="absolute inset-0 bg-black/50 text-white flex items-center justify-center text-xs font-bold z-10">
+                                 +{{ count - 3 }}
+                             </div>
                          {% endif %}
+                         <img src="{{ visiblePrendas[2].imagenUrl ?: asset('images/placeholder.png') }}" class="w-full h-full object-cover" alt="Item 3">
                      </div>
+                 </div>
+            {% else %}
+                 {# No prendas — placeholder #}
+                 <div class="w-full h-full flex items-center justify-center text-gray-300">
+                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                         <circle cx="8.5" cy="8.5" r="1.5"/>
+                         <polyline points="21 15 16 10 5 21"/>
+                     </svg>
                  </div>
             {% endif %}
             
@@ -47,17 +54,21 @@
                         {{ outfit.titulo }}
                     </h6>
                     <div class="flex items-center text-xs text-gray-400 font-medium">
-                        <span class="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center mr-1.5 text-[10px] text-gray-500 font-bold">
-                            {{ outfit.user.name|first|upper }}
+                        <span class="w-5 h-5 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center mr-1.5 flex-shrink-0">
+                            {% if outfit.user.profilePhotoUrl %}
+                                <img src="{{ outfit.user.profilePhotoUrl }}" class="w-full h-full object-cover" alt="">
+                            {% else %}
+                                <span class="text-[10px] text-gray-500 font-bold">{{ outfit.user.name|first|upper }}</span>
+                            {% endif %}
                         </span>
                         {{ outfit.user.name|default('Anonymous') }}
                     </div>
                 </div>
                 
-                {# Like Button (Placeholder until refactored) #}
-                <button class="text-gray-400 hover:text-red-500 transition-colors">
-                    <i class="bi bi-heart"></i>
-                </button>
+                {# Like count #}
+                <span class="text-xs text-gray-400 flex items-center gap-1">
+                    <i class="bi bi-heart"></i> {{ outfit.likes|length }}
+                </span>
             </div>
             
             {% if outfit.descripcion %}
